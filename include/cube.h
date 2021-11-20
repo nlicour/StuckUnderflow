@@ -29,7 +29,13 @@ namespace cube
     // Initialize a cube by setting up the socket connection, creating the universes, etc.
     bool init(Cube*);
 
+
     void ligthLed(Cube* cube, Vec3 tal, unsigned int led, Color color);
+    void ligthLed(Cube *cube, unsigned int talIdex, unsigned int led, Color color);
 
     void ligthTal(Cube* cube, Vec3 tal, Color color);
+    void ligthTal(Cube *cube, unsigned int talIdex, Color color);
+
+    void commit(Cube *cube);
+
 } // namespace cube

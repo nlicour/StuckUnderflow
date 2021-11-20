@@ -133,6 +133,15 @@ void do_s01e02(Cube *cube, RemoteSystem *remote)
     cube::lightTal(cube, {1, 2, 0}, yellow);
     cube::lightTal(cube, {2, 1, 0}, yellow);
 
+
+    cube::lightTal(cube, {1, 2, 3}, yellow);
+    cube::lightTal(cube, {2, 1, 3}, yellow);
+    cube::lightTal(cube, {3, 1, 2}, yellow);
+    cube::lightTal(cube, {1, 3, 2}, yellow);
+    cube::lightTal(cube, {2, 3, 1}, yellow);
+    cube::lightTal(cube, {3, 2, 1}, yellow);
+
+
     cube::commit(cube);
 }
 

@@ -26,9 +26,7 @@ struct RemoteListenerContext
 {
     bool run;
     int socket_handle;
-
-    uint8_t queue_head = 0;
-    std::vector<uint16_t> event_queue; // Event queue of buttons states.
+    uint16_t buttons_state = 0;
 };
 
 void* remote_listener_task(void* args)
@@ -45,16 +43,7 @@ void* remote_listener_task(void* args)
             fprintf(stderr, "Failed to receive.");
         }
 
-        uint32_t buttons_state = std::strtoul(reply, NULL, 10);
-        if (ctx->event_queue.size() == MAX_EVENT_QUEUE_SIZE)
-        {
-            ctx->event_queue[ctx->queue_head++] = buttons_state;
-        }
-        else
-        {
-            ctx->queue_head = 0;
-            ctx->event_queue.push_back(buttons_state);
-        }
+        ctx->buttons_state = std::strtoul(reply, NULL, 10);
     }
 
     pthread_exit(0);
@@ -147,7 +136,7 @@ bool connect(RemoteSystem* rs, uint32_t remote_id)
     return true;
 }
 
-bool poll_remote(RemoteSystem* rs, uint32_t remote_id, uint16_t* buttons)
+uint16_t get_remote_state(RemoteSystem* rs, uint32_t remote_id)
 {
     if (remote_id >= MAX_NUM_REMOTES)
     {
@@ -157,13 +146,6 @@ bool poll_remote(RemoteSystem* rs, uint32_t remote_id, uint16_t* buttons)
 
     if (rs->contexts[remote_id] == NULL) return false;
 
-    if (!rs->contexts[remote_id]->event_queue.empty())
-    {
-        *buttons = rs->contexts[remote_id]->event_queue.back();
-        rs->contexts[remote_id]->event_queue.pop_back();
-        return true;
-    }
-
-    return false;
+    return rs->contexts[remote_id]->buttons_state;
 }
 } // namespace remote

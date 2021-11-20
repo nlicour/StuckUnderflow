@@ -41,9 +41,9 @@ int main(int argc, char* argv[])
         return false;
     }
 
-    packet.dmp.prop_val[10 + 1] = 255;
-    packet.dmp.prop_val[11 + 1] = 255;
-    packet.dmp.prop_val[12 + 1] = 255;
+    packet.dmp.prop_val[10] = 255;
+    packet.dmp.prop_val[11] = 255;
+    packet.dmp.prop_val[12] = 255;
 
     if (e131_pkt_validate(&packet) != E131_ERR_NONE)
     {

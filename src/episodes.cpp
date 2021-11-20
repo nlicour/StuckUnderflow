@@ -4,7 +4,9 @@
 #include <cstdio>
 #include <unistd.h>
 
-void do_s01e01(Cube* cube)
+#include <iostream>
+
+void do_s01e01(Cube *cube)
 {
     Color start = {255, 0, 0};
     Color end = {255, 255, 0};
@@ -29,8 +31,10 @@ void do_s01e01(Cube* cube)
         }
 
         level += increment;
-        if (level < 0) level = 0;
-        if (level > 255) level = 255;
+        if (level < 0)
+            level = 0;
+        if (level > 255)
+            level = 255;
 
         if (level >= 255)
         {
@@ -57,15 +61,45 @@ void do_s01e01(Cube* cube)
     */
 } // anonymous namespace
 
+void do_s01e02(Cube *cube)
+{
+}
+
+void do_s01e03(Cube *cube)
+{
+
+    while (true)
+    {
+
+        int x, y, z;
+
+        std::cout << "X";
+        std::cin >> x;
+
+        std::cout << "Y";
+        std::cin >> y;
+
+        std::cout << "Z";
+        std::cin >> z;
+
+        std::cout << "X : " << x << " y : " << y << " z : " << z << std::endl;
+
+        cube::ligthTal(cube, {x, y, z}, {255, 255, 255});
+        cube::commit(cube);
+    }
+}
+
 namespace episodes
 {
-void (*list_of_episodes[])(Cube*) = {
-    do_s01e01,
-};
+    void (*list_of_episodes[])(Cube *) = {
+        do_s01e01,
+        do_s01e02,
+        do_s01e03,
+    };
 
-void start_episode(Cube* cube, Episode episode)
-{
-    printf("Starting episode %d\n", episode);
-    list_of_episodes[episode](cube);
-}
+    void start_episode(Cube *cube, Episode episode)
+    {
+        printf("Starting episode %d\n", episode);
+        list_of_episodes[episode](cube);
+    }
 } // namespace episodes

@@ -62,8 +62,7 @@ namespace
 
     void send(const UniverseConnexion &cnx)
     {
-        if (e131_pkt_validate(&cnx.packet) != E131_ERR_NONE
-            || e131_send(cnx.sockfd, &cnx.packet, &cnx.dest) < 0)
+        if (e131_pkt_validate(&cnx.packet) != E131_ERR_NONE || e131_send(cnx.sockfd, &cnx.packet, &cnx.dest) < 0)
         {
             fprintf(stderr, "Packet isn't well formed or couldn't be sent.\n");
             e131_pkt_dump(stderr, &cnx.packet);
@@ -95,7 +94,7 @@ namespace
         }
     }
 
-    void applyColor(Cube* cube, uint8_t tal_index, uint8_t led_index, Tal tal)
+    void applyColor(Cube *cube, uint8_t tal_index, uint8_t led_index, Tal tal)
     {
         uint16_t slot = tal_index * 9 + led_index * 3 + 1;
 
@@ -103,14 +102,14 @@ namespace
         {
             slot -= 510;
 
-            auto& packet = cube->universe2.packet;
+            auto &packet = cube->universe2.packet;
             packet.dmp.prop_val[slot + 0] = tal.leds[led_index].r;
             packet.dmp.prop_val[slot + 1] = tal.leds[led_index].g;
             packet.dmp.prop_val[slot + 2] = tal.leds[led_index].b;
         }
         else
         {
-            auto& packet = cube->universe1.packet;
+            auto &packet = cube->universe1.packet;
             packet.dmp.prop_val[slot + 0] = tal.leds[led_index].r;
             packet.dmp.prop_val[slot + 1] = tal.leds[led_index].g;
             packet.dmp.prop_val[slot + 2] = tal.leds[led_index].b;
@@ -185,8 +184,19 @@ namespace cube
         return mapping[pos.z][pos.x][pos.y];
     }
 
+    bool isVecValid(Vec3 &tal)
+    {
+        return tal.x >=0 && tal.x <= 3 && tal.y >=0 && tal.y <= 3 && tal.z >=0 && tal.z <= 3;
+    }
+
     void ligthTal(Cube *cube, Vec3 tal, Color color)
     {
+        if (!isVecValid(tal))
+        {
+            std::cout << "[ERROR] invalid input" << std::endl;
+            // printf("Invalid ")
+            return;
+        }
         for (unsigned int i = 0; i < 3; i++)
         {
             cube::ligthLed(cube, tal, i, color);

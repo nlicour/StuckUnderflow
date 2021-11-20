@@ -33,7 +33,8 @@ struct Cube
 
 namespace
 {
-    const uint32_t mapping[4][4][4] = {
+    const uint32_t mapping[4][4][4] = 
+    {
         {
             {1, 35, 38, 40},
             {15, 25, 33, 32},
@@ -189,7 +190,7 @@ namespace cube
         return tal.x >=0 && tal.x <= 3 && tal.y >=0 && tal.y <= 3 && tal.z >=0 && tal.z <= 3;
     }
 
-    void ligthTal(Cube *cube, Vec3 tal, Color color)
+    void lightTal(Cube *cube, Vec3 tal, Color color)
     {
         if (!isVecValid(tal))
         {
@@ -199,11 +200,11 @@ namespace cube
         }
         for (unsigned int i = 0; i < 3; i++)
         {
-            cube::ligthLed(cube, tal, i, color);
+            cube::lightLed(cube, tal, i, color);
         }
     }
 
-    void ligthLed(Cube *cube, Vec3 talPos, unsigned int led_index, Color color)
+    void lightLed(Cube *cube, Vec3 talPos, unsigned int led_index, Color color)
     {
         unsigned int tal_index = vec3_to_tal_index(talPos);
 

@@ -19,7 +19,8 @@ static inline float lerp(float a, float b, float t)
 
 static inline ColorF blend_color(const ColorF& c1, const ColorF& c2, float t)
 {
-    return {
+    return 
+    {
         lerp(c1.r, c2.r, t),
         lerp(c1.g, c2.g, t),
         lerp(c1.b, c2.b, t),
@@ -41,11 +42,9 @@ void do_s01e02(Cube *cube)
 
 void do_s01e03(Cube *cube)
 {
-
     while (true)
     {
-
-        int x, y, z;
+        uint8_t x, y, z;
 
         std::cout << "X";
         std::cin >> x;
@@ -58,7 +57,7 @@ void do_s01e03(Cube *cube)
 
         std::cout << "X : " << x << " y : " << y << " z : " << z << std::endl;
 
-        cube::ligthTal(cube, {x, y, z}, {255, 255, 255});
+        cube::lightTal(cube, {x, y, z}, {255, 255, 255});
         cube::commit(cube);
     }
 }
@@ -80,7 +79,7 @@ void do_s01e04(Cube* cube)
             {
                 for (uint8_t z = 1; z < 3; ++z)
                 {
-                    cube::ligthTal(cube, {x, y, z}, color_float_to_uint(c));
+                    cube::lightTal(cube, {x, y, z}, color_float_to_uint(c));
                 }
             }
         }
@@ -101,7 +100,8 @@ void do_s01e04(Cube* cube)
 
 namespace episodes
 {
-    void (*list_of_episodes[])(Cube *) = {
+    void (*list_of_episodes[])(Cube *) = 
+    {
         do_s01e01,
         do_s01e02,
         do_s01e03,

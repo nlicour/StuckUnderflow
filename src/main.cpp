@@ -20,18 +20,15 @@ void ex1(Cube* cube){
     cube::ligthTal(cube, {2, 1, 0}, {255, 0, 255});
     cube::ligthTal(cube, {3, 1, 0}, {255, 0, 255});
 
-
     cube::ligthTal(cube, {0, 2, 0}, {255, 255, 0});
     cube::ligthTal(cube, {1, 2, 0}, {255, 255, 0});
     cube::ligthTal(cube, {2, 2, 0}, {255, 255, 0});
     cube::ligthTal(cube, {3, 2, 0}, {255, 255, 0});
 
-
     cube::ligthTal(cube, {0, 3, 0}, {0, 255, 255});
     cube::ligthTal(cube, {1, 3, 0}, {0, 255, 255});
     cube::ligthTal(cube, {2, 3, 0}, {0, 255, 255});
     cube::ligthTal(cube, {3, 3, 0}, {0, 255, 255});
-
 
     cube::ligthTal(cube, {0, 0, 3}, {128, 128, 128});
     cube::ligthTal(cube, {1, 0, 3}, {128, 128, 128});
@@ -125,7 +122,12 @@ int main(int argc, char* argv[])
         ex2(cube);
         usleep(250000);
     }
-    cube::ligthTal(cube, 2, {255, 255, 255});
+
+    cube::ligthTal(cube, {0, 0, 0}, {255, 255, 255});
+    cube::ligthTal(cube, {1, 2, 1}, {255, 255, 255});
+    cube::ligthTal(cube, {2, 1, 1}, {255, 255, 255});
+    cube::ligthTal(cube, {1, 2, 2}, {255, 255, 255});
+    cube::ligthTal(cube, {2, 1, 2}, {255, 255, 255});
     cube::commit(cube);
 
     cube::destroy(cube);

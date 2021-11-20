@@ -95,11 +95,26 @@ namespace
         }
     }
 
-    void applyColor(UniverseConnexion &cnx, unsigned int index, Tal tal)
+    void applyColor(Cube* cube, uint8_t tal_index, uint8_t led_index, Tal tal)
     {
-        cnx.packet.dmp.prop_val[index] = tal.leds[0].r;
-        cnx.packet.dmp.prop_val[index + 1] = tal.leds[0].g;
-        cnx.packet.dmp.prop_val[index + 2] = tal.leds[0].b;
+        uint16_t slot = tal_index * 9 + led_index * 3 + 1;
+
+        if (slot > cube->universe1.universeSize)
+        {
+            slot -= 510;
+
+            auto& packet = cube->universe2.packet;
+            packet.dmp.prop_val[slot + 0] = tal.leds[led_index].r;
+            packet.dmp.prop_val[slot + 1] = tal.leds[led_index].g;
+            packet.dmp.prop_val[slot + 2] = tal.leds[led_index].b;
+        }
+        else
+        {
+            auto& packet = cube->universe1.packet;
+            packet.dmp.prop_val[slot + 0] = tal.leds[led_index].r;
+            packet.dmp.prop_val[slot + 1] = tal.leds[led_index].g;
+            packet.dmp.prop_val[slot + 2] = tal.leds[led_index].b;
+        }
     }
 
 } // anonymous namespace
@@ -109,8 +124,6 @@ namespace cube
     Cube *create()
     {
         Cube *c = new Cube();
-        // c->universe1 = new UniverseConnexion();
-        // c->universe2 = new UniverseConnexion();
 
         c->universe1.universeId = 1;
         c->universe2.universeId = 2;
@@ -118,12 +131,7 @@ namespace cube
         c->universe1.universeSize = 510;
         c->universe2.universeSize = 66;
 
-        c->tals = std::vector<Tal>();
-
-        for (int cpt = 0; cpt < 64; ++cpt)
-        {
-            c->tals.push_back({});
-        }
+        c->tals.resize(64);
 
         return c;
     }
@@ -135,14 +143,12 @@ namespace cube
 
     bool initUniverse(UniverseConnexion &cnx)
     {
-        // std::cout << cnx.universeId << std::endl;
         cnx.sockfd = e131_socket();
         if (cnx.sockfd < 0)
         {
             fprintf(stderr, "Couldn't create e131 socket.\n");
             return false;
         }
-        // std::cout << cnx->sockfd << std::endl;
 
         if (e131_multicast_dest(&cnx.dest, cnx.universeId, E131_DEFAULT_PORT) < 0)
         {
@@ -174,7 +180,7 @@ namespace cube
         return initUniverse(cube->universe1) && initUniverse(cube->universe2);
     }
 
-    unsigned int convertVec3ToIndex(const Vec3 &pos)
+    unsigned int vec3_to_tal_index(const Vec3 &pos)
     {
         return mapping[pos.z][pos.x][pos.y];
     }
@@ -187,53 +193,22 @@ namespace cube
         }
     }
 
-    void ligthTal(Cube *cube, unsigned int talIdex, Color color)
+    void ligthLed(Cube *cube, Vec3 talPos, unsigned int led_index, Color color)
     {
-        for (unsigned int i = 0; i < 3; i++)
-        {
-            cube::ligthLed(cube, talIdex, i, color);
-        }
-    }
+        unsigned int tal_index = vec3_to_tal_index(talPos);
 
-    void ligthLed(Cube *cube, Vec3 talPos, unsigned int ledIndex, Color color)
-    {
-        unsigned int talIndex = convertVec3ToIndex(talPos);
-        talIndex = (talIndex - 1) * 3 + 1;
-        ligthLed(cube, talIndex, ledIndex, color);
-    }
-
-    void ligthLed(Cube *cube, unsigned int talIdex, unsigned int led, Color color)
-    {
-        cube->tals[talIdex].leds[led].r = color.r;
-        cube->tals[talIdex].leds[led].g = color.g;
-        cube->tals[talIdex].leds[led].b = color.b;
+        cube->tals[tal_index - 1].leds[led_index].r = color.r;
+        cube->tals[tal_index - 1].leds[led_index].g = color.g;
+        cube->tals[tal_index - 1].leds[led_index].b = color.b;
     }
 
     void commit(Cube *cube)
     {
-        for (auto tal : cube->tals)
+        for (int tal_index = 0; tal_index < cube->tals.size(); ++tal_index)
         {
-            unsigned int index = tal.index * 3;
-            // int index = convrtVec3ToIndex(tal);
-
-            if (index > cube->universe1.universeSize)
+            for (int led_index = 0; led_index < 3; ++led_index)
             {
-                applyColor(cube->universe1, index, tal);
-                applyColor(cube->universe1, index + 1, tal);
-            }
-            else
-            {
-                applyColor(cube->universe2, index % cube->universe1.universeSize, tal);
-                applyColor(cube->universe2, (index + 1) % cube->universe1.universeSize, tal);
-            }
-
-            if (index > cube->universe1.universeSize)
-            {
-                applyColor(cube->universe1, index + 2, tal);
-            }
-            else
-            {
-                applyColor(cube->universe2, (index + 2) % cube->universe1.universeSize, tal);
+                applyColor(cube, tal_index, led_index, cube->tals[tal_index]);
             }
         }
 

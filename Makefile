@@ -62,9 +62,7 @@ CFLAGS := -std=c++11 -c -Wall -Wextra -Wpedantic
 CPPFLAGS := $(addprefix -I,$(INCLUDE_DIRS))
 DEPFLAGS = -MMD -MT $@ -MF $(DEPS_DIR)/$(@F:.o=.d) 
 
-EXTRA_FLAGS_debug := -O0 -g
-EXTRA_FLAGS_release := -O2 -DNDEBUG
-EXTRA_FLAGS := $(EXTRA_FLAGS_$(TARGET_BUILD))
+EXTRA_FLAGS := -O0 -g
 
 #------------------------------------------------------------------------------
 # Linker options.

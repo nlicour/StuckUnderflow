@@ -41,7 +41,7 @@ void* remote_listener_task(void* args)
     while (ctx->run)
     {
         // This is blocking.
-        if (!recv->send && recv(ctx->socket_handle, reply, sizeof(reply), 0) < 0)
+        if (recv(ctx->socket_handle, reply, sizeof(reply), 0) < 0)
         {
             fprintf(stderr, "Failed to receive.");
         }

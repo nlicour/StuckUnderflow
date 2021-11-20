@@ -8,6 +8,70 @@
 #include <cstdint>
 #include <cstring>
 
+void ex1(Cube* cube){
+
+    cube::ligthTal(cube, {0, 0, 0}, {255, 255, 255});
+    cube::ligthTal(cube, {1, 0, 0}, {255, 255, 255});
+    cube::ligthTal(cube, {2, 0, 0}, {255, 255, 255});
+    cube::ligthTal(cube, {3, 0, 0}, {255, 255, 255});
+
+    cube::ligthTal(cube, {0, 1, 0}, {255, 0, 255});
+    cube::ligthTal(cube, {1, 1, 0}, {255, 0, 255});
+    cube::ligthTal(cube, {2, 1, 0}, {255, 0, 255});
+    cube::ligthTal(cube, {3, 1, 0}, {255, 0, 255});
+
+
+    cube::ligthTal(cube, {0, 2, 0}, {255, 255, 0});
+    cube::ligthTal(cube, {1, 2, 0}, {255, 255, 0});
+    cube::ligthTal(cube, {2, 2, 0}, {255, 255, 0});
+    cube::ligthTal(cube, {3, 2, 0}, {255, 255, 0});
+
+
+    cube::ligthTal(cube, {0, 3, 0}, {0, 255, 255});
+    cube::ligthTal(cube, {1, 3, 0}, {0, 255, 255});
+    cube::ligthTal(cube, {2, 3, 0}, {0, 255, 255});
+    cube::ligthTal(cube, {3, 3, 0}, {0, 255, 255});
+
+
+    cube::ligthTal(cube, {0, 0, 3}, {128, 128, 128});
+    cube::ligthTal(cube, {1, 0, 3}, {128, 128, 128});
+    cube::ligthTal(cube, {2, 0, 3}, {128, 128, 128});
+    cube::ligthTal(cube, {3, 0, 3}, {128, 128, 128});
+    cube::commit(cube);
+}
+
+void ex2(Cube* cube){
+
+    cube::ligthTal(cube, {0, 0, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {1, 0, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {2, 0, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {3, 0, 0}, {0, 0, 0});
+
+    cube::ligthTal(cube, {0, 1, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {1, 1, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {2, 1, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {3, 1, 0}, {0, 0, 0});
+
+
+    cube::ligthTal(cube, {0, 2, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {1, 2, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {2, 2, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {3, 2, 0}, {0, 0, 0});
+
+
+    cube::ligthTal(cube, {0, 3, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {1, 3, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {2, 3, 0}, {0, 0, 0});
+    cube::ligthTal(cube, {3, 3, 0}, {0, 0, 0});
+
+
+    cube::ligthTal(cube, {0, 0, 3}, {0, 0, 0});
+    cube::ligthTal(cube, {1, 0, 3}, {0, 0, 0});
+    cube::ligthTal(cube, {2, 0, 3}, {0, 0, 0});
+    cube::ligthTal(cube, {3, 0, 3}, {0, 0, 0});
+    cube::commit(cube);
+}
+
 int main(int argc, char* argv[])
 {
     /* For reference, delete once cube.cpp will be complete.
@@ -54,8 +118,15 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    // cube::ligthTal(cube, 2, {255, 255, 255});
-    // cube::commit(cube);
+    for(;;)
+    {
+        ex1(cube);
+        usleep(250000);
+        ex2(cube);
+        usleep(250000);
+    }
+    cube::ligthTal(cube, 2, {255, 255, 255});
+    cube::commit(cube);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

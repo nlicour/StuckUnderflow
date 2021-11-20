@@ -37,5 +37,4 @@ namespace cube
     void ligthTal(Cube *cube, unsigned int talIdex, Color color);
 
     void commit(Cube *cube);
-
 } // namespace cube

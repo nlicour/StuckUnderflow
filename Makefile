@@ -43,7 +43,8 @@ SOURCES := \
 	src/e131.cpp \
 	src/main.cpp \
 	src/cube.cpp \
-	src/remote.cpp
+	src/remote.cpp \
+	src/episodes.cpp \
 
 INCLUDE_DIRS := \
 	include

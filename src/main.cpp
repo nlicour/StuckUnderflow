@@ -31,7 +31,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    episodes::start_episode(cube, Episode::S01E01);
+    episodes::start_episode(cube, Episode::INNER_CUBE_GRADIENT);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

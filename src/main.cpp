@@ -20,8 +20,9 @@ int main(int argc, char* argv[])
         return -1;
     }
 
+    episodes::start_episode(cube, remote_system, Episode::S01E02);
     // episodes::start_episode(cube, remote_system, Episode::S02E01);
-    episodes::start_episode(cube, remote_system, Episode::S01E04);
+    // episodes::start_episode(cube, remote_system, Episode::S02E02);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

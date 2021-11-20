@@ -27,6 +27,9 @@ struct RemoteListenerContext
     bool run;
     int socket_handle;
     uint16_t buttons_state = 0;
+
+    bool send;
+    bool send_led_data;
 };
 
 void* remote_listener_task(void* args)
@@ -38,7 +41,7 @@ void* remote_listener_task(void* args)
     while (ctx->run)
     {
         // This is blocking.
-        if (recv(ctx->socket_handle, reply, sizeof(reply), 0) < 0)
+        if (!recv->send && recv(ctx->socket_handle, reply, sizeof(reply), 0) < 0)
         {
             fprintf(stderr, "Failed to receive.");
         }
@@ -146,6 +149,13 @@ uint16_t get_remote_state(RemoteSystem* rs, uint32_t remote_id)
 
     if (rs->contexts[remote_id] == NULL) return false;
 
-    return rs->contexts[remote_id]->buttons_state;
+    uint16_t state = rs->contexts[remote_id]->buttons_state;
+    // @Fixme: this is a dirty trick that works fine here :)
+    rs->contexts[remote_id]->buttons_state = 0;
+    return state;
+}
+
+void toggle_led(RemoteSystem*, uint8_t led)
+{
 }
 } // namespace remote

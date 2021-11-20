@@ -34,6 +34,15 @@ static inline Color color_float_to_uint(const ColorF &color)
 
 void do_s01e01(Cube *cube, RemoteSystem *remote)
 {
+    for(;;)
+    {
+        cube::lightTal(cube, {0, 0, 0}, {255, 0, 255});
+        cube::commit(cube);
+        usleep(250000);
+        cube::lightTal(cube, {0, 0, 0}, {0, 0, 0});
+        cube::commit(cube);
+        usleep(250000);
+    }
 } // anonymous namespace
 
 void do_s01e02(Cube *cube, RemoteSystem *remote)
@@ -120,6 +129,7 @@ void do_s01e02(Cube *cube, RemoteSystem *remote)
     cube::lightTal(cube, {0, 3, 3}, white);
     cube::lightTal(cube, {0, 2, 3}, white);
     cube::lightTal(cube, {0, 1, 3}, white);
+    cube::lightTal(cube, {0, 0, 3}, white);
 
     cube::commit(cube);
 }
@@ -273,7 +283,62 @@ void do_s02e01(Cube *cube, RemoteSystem *remote)
             cube::commit(cube);
         }
 
-        usleep(25000);
+        usleep(2500);
+    }
+}
+
+void do_s02e02(Cube *cube, RemoteSystem *remote)
+{
+    uint16_t buttons[2];
+    Vec3 positions[2];
+    positions[0] = {0, 0, 0};
+    positions[1] = {0, 0, 3};
+
+    if (!remote::connect(remote, 0))
+    {
+        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
+    }
+
+    if (!remote::connect(remote, 1))
+    {
+        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
+    }
+
+    cube::lightTal(cube, positions[0], {255, 0, 0});
+    cube::lightTal(cube, positions[1], {0, 255, 0});
+    cube::commit(cube);
+
+    auto move_dot = [&](Vec3& pos, uint16_t button, Color c){
+        if (button != 0)
+        {
+            if (button & 0x1)
+            {
+                pos.x = (pos.x + 1) % 4;
+            }
+            if (button & 0x2)
+            {
+                pos.y = (pos.y + 1) % 4;
+            }
+            if (button & 0x4)
+            {
+                pos.z = (pos.z + 1) % 4;
+            }
+        }
+    };
+
+    while (true)
+    {
+        buttons[0] = remote::get_remote_state(remote, 0);
+        buttons[1] = remote::get_remote_state(remote, 1);
+
+        move_dot(positions[0], buttons[0], {255, 0, 0});
+        move_dot(positions[1], buttons[1], {0, 255, 0});
+
+        cube::lightTal(cube, positions[0], {255, 0, 0});
+        cube::lightTal(cube, positions[1], {0, 255, 0});
+        cube::commit(cube);
+
+        usleep(2500);
     }
 }
 
@@ -286,7 +351,8 @@ namespace episodes
             do_s01e02,
             do_s01e03,
             do_s01e04,
-            do_s02e01
+            do_s02e01,
+            do_s02e02,
         };
 
     void start_episode(Cube *cube, RemoteSystem *remote, Episode episode)

@@ -40,6 +40,7 @@ TARGET := $(BIN_DIR)/$(TARGET_NAME)
 # Warning: files *MUST* have unique filename across the whole codebase.
 
 SOURCES := \
+	src/e131.c \
 	src/main.cpp
 
 INCLUDE_DIRS := \

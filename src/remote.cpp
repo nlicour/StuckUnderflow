@@ -12,6 +12,7 @@
 namespace
 {
 constexpr uint8_t MAX_EVENT_QUEUE_SIZE = 64;
+constexpr uint8_t MAX_NUM_REMOTES = 5;
 
 const char* remotes_ips[] = {
     "192.168.88.241",
@@ -45,7 +46,6 @@ void* remote_listener_task(void* args)
         }
 
         uint32_t buttons_state = std::strtoul(reply, NULL, 10);
-        printf("Received: %d\n", buttons_state);
         if (ctx->event_queue.size() == MAX_EVENT_QUEUE_SIZE)
         {
             ctx->event_queue[ctx->queue_head++] = buttons_state;
@@ -63,10 +63,9 @@ void* remote_listener_task(void* args)
 
 struct RemoteSystem
 {
-    int socket_handle;
-
-    pthread_t th;
-    RemoteListenerContext* th_ctx;
+    // @Todo: handle remotes deconnection.
+    pthread_t handles[MAX_NUM_REMOTES];
+    RemoteListenerContext* contexts[MAX_NUM_REMOTES];
 };
 
 namespace remote
@@ -83,6 +82,12 @@ void destroy_system(RemoteSystem* rs)
 
 bool connect(RemoteSystem* rs, uint32_t remote_id)
 {
+    if (remote_id >= MAX_NUM_REMOTES)
+    {
+        fprintf(stderr, "Invalid remote id %d\n", remote_id);
+        return false;
+    }
+
     int socket_handle = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_handle < 0)
     {
@@ -121,26 +126,41 @@ bool connect(RemoteSystem* rs, uint32_t remote_id)
         return false;
     }
 
+    // It looks like a remote is already connected.
+    if (rs->contexts[remote_id] != NULL)
+    {
+        rs->handles[remote_id] = 0;
+        rs->contexts[remote_id]->run = false;
+    }
+
     RemoteListenerContext* ctx = new RemoteListenerContext();
     ctx->run = true;
     ctx->socket_handle = socket_handle;
-    if(pthread_create(&rs->th, NULL, remote_listener_task, ctx) < 0)
+    if(pthread_create(&rs->handles[remote_id], NULL, remote_listener_task, ctx) < 0)
     {
         fprintf(stderr, "Couldn't create remote thread.\n");
         return false;
     }
-    rs->th_ctx = ctx;
+    rs->contexts[remote_id] = ctx;
 
-    printf("Remote connected!\n");
+    printf("Remote %d connected!\n", remote_id);
     return true;
 }
 
 bool poll_remote(RemoteSystem* rs, uint32_t remote_id, uint16_t* buttons)
 {
-    if (!rs->th_ctx->event_queue.empty())
+    if (remote_id >= MAX_NUM_REMOTES)
     {
-        *buttons = rs->th_ctx->event_queue.back();
-        rs->th_ctx->event_queue.pop_back();
+        fprintf(stderr, "Invalid remote id %d\n", remote_id);
+        return false;
+    }
+
+    if (rs->contexts[remote_id] == NULL) return false;
+
+    if (!rs->contexts[remote_id]->event_queue.empty())
+    {
+        *buttons = rs->contexts[remote_id]->event_queue.back();
+        rs->contexts[remote_id]->event_queue.pop_back();
         return true;
     }
 

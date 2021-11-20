@@ -26,19 +26,62 @@ struct UniverseConnexion
 struct Cube
 {
     std::vector<Tal> tals;
-    UniverseConnexion *universe1;
-    UniverseConnexion *universe2;
+    UniverseConnexion universe1;
+    UniverseConnexion universe2;
 };
+
+namespace
+{
+void send(const UniverseConnexion& cnx)
+{
+    if (e131_pkt_validate(&cnx.packet) != E131_ERR_NONE
+        || e131_send(cnx.sockfd, &cnx.packet, &cnx.dest) < 0)
+    {
+        fprintf(stderr, "Packet isn't well formed or couldn't be sent.\n");
+        e131_pkt_dump(stderr, &cnx.packet);
+        return;
+    }
+}
+
+void send(Cube *cube)
+{
+    send(cube->universe1);
+    send(cube->universe2);
+}
+
+void resetTals(Cube* cube)
+{
+    for(auto& tal : cube->tals){
+        tal.leds[0].r = 0;
+        tal.leds[0].g = 0;
+        tal.leds[0].b = 0;
+
+        tal.leds[1].r = 0;
+        tal.leds[1].g = 0;
+        tal.leds[1].b = 0;
+
+        tal.leds[2].r = 0;
+        tal.leds[2].g = 0;
+        tal.leds[2].b = 0;
+    }
+}
+
+void applyColor(UniverseConnexion& cnx, unsigned int index, Tal tal)
+{
+    cnx.packet.dmp.prop_val[index] = tal.leds[0].r;
+    cnx.packet.dmp.prop_val[index + 1] = tal.leds[0].g;
+    cnx.packet.dmp.prop_val[index + 2] = tal.leds[0].b;
+}
+
+} // anonymous namespace
 
 namespace cube
 {
     Cube *create()
     {
         Cube *c = new Cube();
-        c->universe1 = new UniverseConnexion();
-        c->universe1->universeSize = 510;
-        c->universe2 = new UniverseConnexion();
-        c->universe2->universeSize = 66;
+        c->universe1.universeSize = 510;
+        c->universe2.universeSize = 66;
 
         c->tals = std::vector<Tal>();
 
@@ -52,38 +95,36 @@ namespace cube
 
     void destroy(Cube *cube)
     {
-        delete cube->universe1;
-        delete cube->universe2;
         delete cube;
     }
 
-    bool initUniverse(UniverseConnexion *cnx)
+    bool initUniverse(UniverseConnexion& cnx)
     {
-        if (cnx->sockfd < 0)
+        if (cnx.sockfd < 0)
         {
             fprintf(stderr, "Couldn't create e131 socket.\n");
             return false;
         }
 
-        if (e131_multicast_dest(&cnx->dest, cnx->universeId, E131_DEFAULT_PORT) < 0)
+        if (e131_multicast_dest(&cnx.dest, cnx.universeId, E131_DEFAULT_PORT) < 0)
         {
             fprintf(stderr, "Couldn't create a multicast destinations\n");
             return false;
         }
 
-        if (e131_multicast_join(cnx->sockfd, 1) < 0)
+        if (e131_multicast_join(cnx.sockfd, 1) < 0)
         {
             fprintf(stderr, "Couldn't join sockets to universes\n");
             return false;
         }
 
-        if (e131_set_option(&cnx->packet, E131_OPT_PREVIEW, true) < 0)
+        if (e131_set_option(&cnx.packet, E131_OPT_PREVIEW, true) < 0)
         {
             fprintf(stderr, "Couldn't set e131 option.\n");
             return false;
         }
 
-        memcpy(cnx->packet.frame.source_name, "Stuckunderflower", 16);
+        memcpy(cnx.packet.frame.source_name, "Stuckunderflower", 16);
 
         return true;
     }
@@ -93,7 +134,7 @@ namespace cube
         return initUniverse(cube->universe1) && initUniverse(cube->universe2);
     }
 
-    unsigned int convertVec3ToIndex(Vec3 &pos)
+    unsigned int convertVec3ToIndex(const Vec3& pos)
     {
         return 9;
     }
@@ -126,78 +167,36 @@ namespace cube
         cube->tals[talIdex].leds[led].g = color.g;
         cube->tals[talIdex].leds[led].b = color.b;
     }
-}
 
-void send(UniverseConnexion *cnx)
-{
-    if (e131_send(cnx->sockfd, &cnx->packet, &cnx->dest) < 0)
+    void commit(Cube *cube)
     {
-        fprintf(stderr, "Couldn't send packet.\n");
-        e131_pkt_dump(stderr, &cnx->packet);
-        return;
+        for (auto tal : cube->tals)
+        {
+            unsigned int index = tal.index * 3;
+            // int index = convrtVec3ToIndex(tal);
+
+            if (index > cube->universe1.universeSize)
+            {
+                applyColor(cube->universe1, index, tal);
+                applyColor(cube->universe1, index + 1, tal);
+            }
+            else
+            {
+                applyColor(cube->universe2, index % cube->universe1.universeSize, tal);
+                applyColor(cube->universe2, (index + 1) % cube->universe1.universeSize, tal);
+            }
+
+            if (index > cube->universe1.universeSize)
+            {
+                applyColor(cube->universe1, index + 2, tal);
+            }
+            else
+            {
+                applyColor(cube->universe2, (index + 2) % cube->universe1.universeSize, tal);
+            }
+        }
+
+        send(cube);
+        resetTals(cube);
     }
-}
-
-void send(Cube *cube)
-{
-    send(cube->universe1);
-    send(cube->universe2);
-}
-
-void resetTals(Cube* cube)
-{
-    for(auto tal : cube->tals){
-        tal.leds[0].r = 0;
-        tal.leds[0].g = 0;
-        tal.leds[0].b = 0;
-
-        tal.leds[1].r = 0;
-        tal.leds[1].g = 0;
-        tal.leds[1].b = 0;
-
-        tal.leds[2].r = 0;
-        tal.leds[2].g = 0;
-        tal.leds[2].b = 0;
-    }
-}
-
-void applyColor(UniverseConnexion *cnx, unsigned int index, Tal tal)
-{
-    cnx->packet.dmp.prop_val[index] = tal.leds[0].r;
-    cnx->packet.dmp.prop_val[index + 1] = tal.leds[0].g;
-    cnx->packet.dmp.prop_val[index + 2] = tal.leds[0].b;
-}
-
-void commit(Cube *cube)
-{
-    for (auto tal : cube->tals)
-    {
-        int index = tal.index * 3;
-        // int index = convrtVec3ToIndex(tal);
-
-        if (index > cube->universe1->universeSize)
-        {
-            applyColor(cube->universe1, index, tal);
-            applyColor(cube->universe1, index + 1, tal);
-        }
-        else
-        {
-            applyColor(cube->universe2, index % cube->universe1->universeSize, tal);
-            applyColor(cube->universe2, (index + 1) % cube->universe1->universeSize, tal);
-        }
-
-        if (index > cube->universe1->universeSize)
-        {
-            applyColor(cube->universe1, index + 2, tal);
-        }
-        else
-        {
-            applyColor(cube->universe2, (index + 2) % cube->universe1->universeSize, tal);
-        }
-    }
-
-    send(cube);
-    resetTals(cube);
-}
-
-// namespace cube
+} // namespace cube

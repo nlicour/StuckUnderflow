@@ -81,11 +81,11 @@ namespace cube
     Cube *create()
     {
         Cube *c = new Cube();
-        c->universe1 = new UniverseConnexion();
-        c->universe2 = new UniverseConnexion();
+        // c->universe1 = new UniverseConnexion();
+        // c->universe2 = new UniverseConnexion();
         
-        c->universe1->universeId = 1;
-        c->universe2->universeId = 2;
+        c->universe1.universeId = 1;
+        c->universe2.universeId = 2;
 
         c->universe1.universeSize = 510;
         c->universe2.universeSize = 66;
@@ -107,14 +107,14 @@ namespace cube
 
     bool initUniverse(UniverseConnexion& cnx)
     {
-        std::cout << cnx->universeId << std::endl;
-        cnx->sockfd = e131_socket();
-        if (cnx->sockfd < 0)
+        // std::cout << cnx.universeId << std::endl;
+        cnx.sockfd = e131_socket();
+        if (cnx.sockfd < 0)
         {
             fprintf(stderr, "Couldn't create e131 socket.\n");
             return false;
         }
-        std::cout << cnx->sockfd << std::endl;
+        // std::cout << cnx->sockfd << std::endl;
 
 
         if (e131_multicast_dest(&cnx.dest, cnx.universeId, E131_DEFAULT_PORT) < 0)
@@ -123,7 +123,7 @@ namespace cube
             return false;
         }
 
-        if (e131_multicast_join(cnx->sockfd, cnx->universeId) < 0)
+        if (e131_multicast_join(cnx.sockfd, cnx.universeId) < 0)
         {
             fprintf(stderr, "Couldn't join sockets to universes\n");
             return false;

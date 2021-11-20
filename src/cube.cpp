@@ -17,8 +17,8 @@ struct Tal
 
 struct UniverseConnexion
 {
-    unsigned int universeId;
-    unsigned int universeSize;
+    uint16_t universeId;
+    uint16_t universeSize;
     int sockfd;       // Socket
     e131_addr_t dest; // Destination
     e131_packet_t packet;
@@ -180,14 +180,14 @@ namespace cube
         return initUniverse(cube->universe1) && initUniverse(cube->universe2);
     }
 
-    unsigned int vec3_to_tal_index(const Vec3 &pos)
+    uint8_t vec3_to_tal_index(const Vec3 &pos)
     {
         return mapping[pos.z][pos.x][pos.y];
     }
 
     bool isVecValid(Vec3 &tal)
     {
-        return tal.x >=0 && tal.x <= 3 && tal.y >=0 && tal.y <= 3 && tal.z >=0 && tal.z <= 3;
+        return tal.x <= 3 && tal.y <= 3 && tal.z <= 3;
     }
 
     void lightTal(Cube *cube, Vec3 tal, Color color)
@@ -195,18 +195,17 @@ namespace cube
         if (!isVecValid(tal))
         {
             std::cout << "[ERROR] invalid input" << std::endl;
-            // printf("Invalid ")
             return;
         }
-        for (unsigned int i = 0; i < 3; i++)
+        for (uint8_t i = 0; i < 3; i++)
         {
             cube::lightLed(cube, tal, i, color);
         }
     }
 
-    void lightLed(Cube *cube, Vec3 talPos, unsigned int led_index, Color color)
+    void lightLed(Cube *cube, Vec3 talPos, uint8_t led_index, Color color)
     {
-        unsigned int tal_index = vec3_to_tal_index(talPos);
+        uint8_t tal_index = vec3_to_tal_index(talPos);
 
         cube->tals[tal_index - 1].leds[led_index].r = color.r;
         cube->tals[tal_index - 1].leds[led_index].g = color.g;
@@ -215,9 +214,9 @@ namespace cube
 
     void commit(Cube *cube)
     {
-        for (int tal_index = 0; tal_index < cube->tals.size(); ++tal_index)
+        for (uint8_t tal_index = 0; tal_index < cube->tals.size(); ++tal_index)
         {
-            for (int led_index = 0; led_index < 3; ++led_index)
+            for (uint8_t led_index = 0; led_index < 3; ++led_index)
             {
                 applyColor(cube, tal_index, led_index, cube->tals[tal_index]);
             }

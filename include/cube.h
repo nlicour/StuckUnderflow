@@ -1,10 +1,10 @@
 #pragma once
-//
+
 #include <cstdint>
-//
+
 class Cube;
 
-struct Color 
+struct Color
 {
     uint8_t r, g, b;
 };
@@ -16,7 +16,11 @@ struct Vec3
 
 namespace cube
 {
-    void ligthTal(Cube* cube, Vec3 tal, Color color);
+    Cube* create();
+    void destroy(Cube*);
 
-    
-}
+    // Initialize a cube by setting up the socket connection, creating the universes, etc.
+    bool init(Cube*);
+
+    void ligthTal(Cube* cube, Vec3 tal, Color color);
+} // namespace cube

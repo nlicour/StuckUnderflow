@@ -1,3 +1,5 @@
+#include "cube.h"
+
 #include <unistd.h> // This must be included before 'e131.h'.
 #include "e131.h"
 
@@ -7,29 +9,7 @@
 
 int main(int argc, char* argv[])
 {
-    static const uint16_t UNIVERSE_1 = 1;
-    static const uint16_t UNIVERSE_2 = 2;
-
-    int sockfd = e131_socket();
-    if (sockfd < 0)
-    {
-        fprintf(stderr, "Couldn't create e131 socket.\n");
-        return -1;
-    }
-
-    e131_addr_t dest_universe_1;
-    if (e131_multicast_dest(&dest_universe_1, UNIVERSE_1, E131_DEFAULT_PORT) < 0)
-    {
-        fprintf(stderr, "Couldn't create a multicast destination on universe %d port %d\n", UNIVERSE_1, E131_DEFAULT_PORT);
-        return -1;
-    }
-
-    if (e131_multicast_join(sockfd, UNIVERSE_1) < 0)
-    {
-        fprintf(stderr, "Couldn't join socket to universe %d\n", UNIVERSE_1);
-        return -1;
-    }
-
+    /* For reference, delete once cube.cpp will be complete.
     // Configure packet.
     e131_packet_t packet;
     e131_pkt_init(&packet, UNIVERSE_1, 510);
@@ -51,7 +31,17 @@ int main(int argc, char* argv[])
         e131_pkt_dump(stdout, &packet);
         return -1;
     }
+    */
 
+    Cube* cube = cube::create();
+    if (!cube::init(cube))
+    {
+        fprintf(stderr, "Couldn't initialize a cube\n");
+        return -1;
+    }
+    cube::destroy(cube);
+
+    /* For reference, delete once cube.cpp will be complete.
     for(;;)
     {
         if (e131_send(sockfd, &packet, &dest_universe_1) < 0)
@@ -63,6 +53,7 @@ int main(int argc, char* argv[])
         packet.frame.seq_number++;
         usleep(250000);
     }
+    */
 
     return 0;
 }

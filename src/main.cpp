@@ -20,7 +20,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    episodes::start_episode(cube, remote_system, Episode::S01E02);
+    episodes::start_episode(cube, remote_system, Episode::S01E03);
     // episodes::start_episode(cube, remote_system, Episode::S02E01);
     // episodes::start_episode(cube, remote_system, Episode::S02E02);
 

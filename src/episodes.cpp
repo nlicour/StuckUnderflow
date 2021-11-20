@@ -137,7 +137,7 @@ void do_s01e03(Cube *cube, RemoteSystem *remote)
 {
     while (true)
     {
-        uint8_t x, y, z;
+        uint32_t x, y, z;
 
         std::cout << "X";
         std::cin >> x;

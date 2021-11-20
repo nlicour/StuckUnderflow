@@ -11,7 +11,7 @@ struct Color
 
 struct Vec3
 {
-    uint8_t x, y, z;
+    uint32_t x, y, z;
 
     bool operator==(const Vec3& other)
     {

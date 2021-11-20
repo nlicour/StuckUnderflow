@@ -13,7 +13,6 @@ int main(int argc, char* argv[])
 {
     RemoteSystem* remote_system = remote::create_system();
 
-    /*
     if (!remote::connect(remote_system, 0))
     {
         fprintf(stderr, "Couldn't connect to remote %d\n", 0);
@@ -22,7 +21,6 @@ int main(int argc, char* argv[])
     {
         printf("Remote connected.\n");
     }
-    */
 
     Cube* cube = cube::create();
     if (!cube::init(cube))
@@ -31,7 +29,12 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    episodes::start_episode(cube, Episode::INNER_CUBE_GRADIENT);
+    uint16_t buttons;
+    for(;;)
+    {
+        while (remote::poll_remote(remote_system, 0, &buttons));
+    }
+    // episodes::start_episode(cube, Episode::INNER_CUBE_GRADIENT);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

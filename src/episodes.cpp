@@ -15,33 +15,32 @@ struct ColorF
 
 static inline float lerp(float a, float b, float t)
 {
-    return (1 - t)*a + t*b;
+    return (1 - t) * a + t * b;
 }
 
-static inline ColorF blend_color(const ColorF& c1, const ColorF& c2, float t)
+static inline ColorF blend_color(const ColorF &c1, const ColorF &c2, float t)
 {
-    return 
-    {
+    return {
         lerp(c1.r, c2.r, t),
         lerp(c1.g, c2.g, t),
         lerp(c1.b, c2.b, t),
     };
 }
 
-static inline Color color_float_to_uint(const ColorF& color)
+static inline Color color_float_to_uint(const ColorF &color)
 {
     return {(uint8_t)(color.r * 255), (uint8_t)(color.g * 255), (uint8_t)(color.b * 255)};
 }
 
-void do_s01e01(Cube* cube, RemoteSystem* remote)
+void do_s01e01(Cube *cube, RemoteSystem *remote)
 {
 } // anonymous namespace
 
-void do_s01e02(Cube *cube, RemoteSystem* remote)
+void do_s01e02(Cube *cube, RemoteSystem *remote)
 {
 }
 
-void do_s01e03(Cube *cube, RemoteSystem* remote)
+void do_s01e03(Cube *cube, RemoteSystem *remote)
 {
     while (true)
     {
@@ -63,7 +62,7 @@ void do_s01e03(Cube *cube, RemoteSystem* remote)
     }
 }
 
-void do_s01e04(Cube* cube, RemoteSystem* remote)
+void do_s01e04(Cube *cube, RemoteSystem *remote)
 {
     ColorF start = {1, 0, 0};
     ColorF end = {1, 1, 0};
@@ -156,18 +155,51 @@ void do_multi_remotes(Cube* cube, RemoteSystem* remote)
     }
 }
 
+void do_s02e01(Cube *cube, RemoteSystem *remote)
+{
+    uint16_t button;
+    Vec3 position = {0, 0, 0};
+    cube::lightTal(cube, position, {255, 0, 255});
+    cube::commit(cube);
+
+    while (true)
+    {
+        if (remote::poll_remote(remote, 0, &button))
+        {
+            if (button == 0)
+            {
+                position.x = (position.x + 1) % 3;
+            }
+            if (button & 1)
+            {
+                position.y = (position.y + 1) % 3;
+            }
+            if (button & 2)
+            {
+                position.z = (position.z + 1) % 3;
+            }
+
+            cube::lightTal(cube, position, {255, 0, 255});
+            cube::commit(cube);
+        }
+
+        usleep(25000);
+    }
+}
+
 namespace episodes
 {
-    void (*list_of_episodes[])(Cube *, RemoteSystem* remote) = 
-    {
-        do_multi_remotes,
-        do_s01e01,
-        do_s01e02,
-        do_s01e03,
-        do_s01e04,
-    };
+    void (*list_of_episodes[])(Cube *, RemoteSystem *remote) =
+        {
+            do_multi_remotes,
+            do_s01e01,
+            do_s01e02,
+            do_s01e03,
+            do_s01e04,
+            do_s02e01
+        };
 
-    void start_episode(Cube *cube, RemoteSystem* remote, Episode episode)
+    void start_episode(Cube *cube, RemoteSystem *remote, Episode episode)
     {
         printf("Starting episode %d\n", episode);
         list_of_episodes[episode](cube, remote);

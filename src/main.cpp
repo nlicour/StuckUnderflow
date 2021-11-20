@@ -41,7 +41,6 @@ int main(int argc, char* argv[])
 
     packet_u1.frame.seq_number = 2;
 
-    /*
     // 1 - 36 axe vertical.
     //      1 - 9 -> 1TAL
     //      10 - 18 -> 2TAL
@@ -67,7 +66,6 @@ int main(int argc, char* argv[])
 
         slot_end += 9;
     }
-    */
 
     return 0;
 

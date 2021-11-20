@@ -1,4 +1,4 @@
-#include <unistd.h> // THis must be included before 'e131.h'.
+#include <unistd.h> // This must be included before 'e131.h'.
 #include "e131.h"
 
 #include <cstdio>

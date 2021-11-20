@@ -1,3 +1,4 @@
+#include "remote.h"
 #include "episodes.h"
 #include "cube.h"
 
@@ -32,15 +33,15 @@ static inline Color color_float_to_uint(const ColorF& color)
     return {(uint8_t)(color.r * 255), (uint8_t)(color.g * 255), (uint8_t)(color.b * 255)};
 }
 
-void do_s01e01(Cube* cube)
+void do_s01e01(Cube* cube, RemoteSystem* remote)
 {
 } // anonymous namespace
 
-void do_s01e02(Cube *cube)
+void do_s01e02(Cube *cube, RemoteSystem* remote)
 {
 }
 
-void do_s01e03(Cube *cube)
+void do_s01e03(Cube *cube, RemoteSystem* remote)
 {
     while (true)
     {
@@ -62,7 +63,7 @@ void do_s01e03(Cube *cube)
     }
 }
 
-void do_s01e04(Cube* cube)
+void do_s01e04(Cube* cube, RemoteSystem* remote)
 {
     ColorF start = {1, 0, 0};
     ColorF end = {1, 1, 0};
@@ -100,7 +101,7 @@ void do_s01e04(Cube* cube)
 
 namespace episodes
 {
-    void (*list_of_episodes[])(Cube *) = 
+    void (*list_of_episodes[])(Cube *, RemoteSystem* remote) = 
     {
         do_s01e01,
         do_s01e02,
@@ -108,9 +109,9 @@ namespace episodes
         do_s01e04,
     };
 
-    void start_episode(Cube *cube, Episode episode)
+    void start_episode(Cube *cube, RemoteSystem* remote, Episode episode)
     {
         printf("Starting episode %d\n", episode);
-        list_of_episodes[episode](cube);
+        list_of_episodes[episode](cube, remote);
     }
 } // namespace episodes

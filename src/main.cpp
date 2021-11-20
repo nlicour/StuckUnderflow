@@ -29,13 +29,13 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    uint16_t buttons;
-    for(;;)
-    {
-        while (remote::poll_remote(remote_system, 0, &buttons));
-    }
+    // uint16_t buttons;
+    // for(;;)
+    // {
+    //     while (remote::poll_remote(remote_system, 0, &buttons));
+    // }
 
-    // episodes::start_episode(cube, Episode::S01E03);
+    episodes::start_episode(cube, remote_system, Episode::S01E03);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

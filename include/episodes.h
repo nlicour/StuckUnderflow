@@ -17,7 +17,7 @@ enum Episode
 
 namespace episodes
 {
-void start_episode(Cube*, Episode);
+void start_episode(Cube*, RemoteSystem*, Episode);
 } // namespace episodes
 
 #endif // EPISODES_H_

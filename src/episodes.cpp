@@ -132,12 +132,12 @@ void do_multi_remotes(Cube* cube, RemoteSystem* remote)
         bool remote_1_has_event = false;
         bool remote_2_has_event = false;
 
-        while (remote::poll_remote(remote, 0, &buttons_1))
+        if ((buttons_1 = remote::get_remote_state(remote, 0)))
         {
             remote_1_has_event = true;
         }
 
-        while (remote::poll_remote(remote, 1, &buttons_2))
+        if ((buttons_2 = remote::get_remote_state(remote, 1)))
         {
             remote_2_has_event = true;
         }
@@ -162,21 +162,27 @@ void do_s02e01(Cube *cube, RemoteSystem *remote)
     cube::lightTal(cube, position, {255, 0, 255});
     cube::commit(cube);
 
+    if (!remote::connect(remote, 1))
+    {
+        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
+    }
+
     while (true)
     {
-        if (remote::poll_remote(remote, 0, &button))
+        button = remote::get_remote_state(remote, 1);
+        if (button != 0)
         {
-            if (button == 0)
+            if (button & 0x1)
             {
-                position.x = (position.x + 1) % 3;
+                position.x = (position.x + 1) % 4;
             }
-            if (button & 1)
+            if (button & 0x2)
             {
-                position.y = (position.y + 1) % 3;
+                position.y = (position.y + 1) % 4;
             }
-            if (button & 2)
+            if (button & 0x4)
             {
-                position.z = (position.z + 1) % 3;
+                position.z = (position.z + 1) % 4;
             }
 
             cube::lightTal(cube, position, {255, 0, 255});

@@ -5,7 +5,8 @@ class Cube;
 
 enum Episode
 {
-    S01E01 = 0,
+    MULTIPLE_REMOTES = 0,
+    S01E01,
     S01E02,
     S01E03,
     S01E04,
@@ -17,7 +18,7 @@ enum Episode
 
 namespace episodes
 {
-void start_episode(Cube*, Episode);
+void start_episode(Cube*, RemoteSystem*, Episode);
 } // namespace episodes
 
 #endif // EPISODES_H_

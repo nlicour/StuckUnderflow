@@ -49,7 +49,7 @@ SOURCES := \
 INCLUDE_DIRS := \
 	include
 
-LIBS :=
+LIBS := -lpthread
 
 #------------------------------------------------------------------------------
 # Tools selections

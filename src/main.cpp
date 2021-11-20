@@ -1,4 +1,5 @@
 #include "cube.h"
+#include "remote.h"
 
 #include <unistd.h> // This must be included before 'e131.h'.
 #include "e131.h"
@@ -33,6 +34,19 @@ int main(int argc, char* argv[])
     }
     */
 
+    RemoteSystem* remote_system = remote::create_system();
+
+    /*
+    if (!remote::connect(remote_system, 0))
+    {
+        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
+    }
+    else
+    {
+        printf("Remote connected.\n");
+    }
+    */
+
     Cube* cube = cube::create();
     if (!cube::init(cube))
     {
@@ -40,10 +54,11 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    cube::ligthTal(cube, 2, {255, 255, 255});
-    cube::commit(cube);
+    // cube::ligthTal(cube, 2, {255, 255, 255});
+    // cube::commit(cube);
 
     cube::destroy(cube);
+    remote::destroy_system(remote_system);
 
     /* For reference, delete once cube.cpp will be complete.
     for(;;)

@@ -7,8 +7,8 @@ class RemoteSystem;
 
 namespace remote
 {
-RemoteSystem* create();
-void destroy(RemoteSystem*);
+RemoteSystem* create_system();
+void destroy_system(RemoteSystem*);
 bool connect(RemoteSystem*, uint32_t remote_id);
 } // namespace anonymous
 

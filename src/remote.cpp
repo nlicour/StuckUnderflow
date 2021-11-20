@@ -4,6 +4,7 @@
 #include <sys/socket.h>
 #include <arpa/inet.h>
 #include <netinet/in.h>
+#include <cstring>
 
 namespace
 {
@@ -24,12 +25,12 @@ struct RemoteSystem
 
 namespace remote
 {
-RemoteSystem* create()
+RemoteSystem* create_system()
 {
     return new RemoteSystem();
 }
 
-void destroy(RemoteSystem* rs)
+void destroy_system(RemoteSystem* rs)
 {
     delete rs;
 }
@@ -53,6 +54,27 @@ bool connect(RemoteSystem* rs, uint32_t remote_id)
         return false;
     }
 
+    /*
+    const char* msg = "hello";
+    if (send(rs->socket_handle, msg, strlen(msg), 0) < 0)
+    {
+        fprintf(stderr, "Fail to send message\n");
+    }
+    */
+
+    char reply[1024];
+    if (recv(rs->socket_handle, reply, 1024, 0) < 0)
+    {
+        fprintf(stderr, "Failed to receive.");
+    }
+
+    if (strncmp(reply, "24HC21 remote", 13) != 0)
+    {
+        fprintf(stderr, "Failed to connect.\n");
+        return false;
+    }
+
+    printf("Remote connected!\n");
     return true;
 }
 } // namespace remote

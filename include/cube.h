@@ -30,11 +30,9 @@ namespace cube
     bool init(Cube*);
 
 
-    void ligthLed(Cube* cube, Vec3 tal, unsigned int led, Color color);
-    void ligthLed(Cube *cube, unsigned int talIndex, unsigned int led, Color color);
+    void lightLed(Cube* cube, Vec3 tal, uint8_t led, Color color);
 
-    void ligthTal(Cube* cube, Vec3 tal, Color color);
-    void ligthTal(Cube *cube, unsigned int talIdex, Color color);
+    void lightTal(Cube* cube, Vec3 tal, Color color);
 
     void commit(Cube *cube);
 } // namespace cube

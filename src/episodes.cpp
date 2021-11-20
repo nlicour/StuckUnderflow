@@ -5,6 +5,8 @@
 #include <unistd.h>
 #include <utility>
 
+#include <iostream>
+
 struct ColorF
 {
     float r, g, b;
@@ -17,7 +19,8 @@ static inline float lerp(float a, float b, float t)
 
 static inline ColorF blend_color(const ColorF& c1, const ColorF& c2, float t)
 {
-    return {
+    return 
+    {
         lerp(c1.r, c2.r, t),
         lerp(c1.g, c2.g, t),
         lerp(c1.b, c2.b, t),
@@ -29,7 +32,37 @@ static inline Color color_float_to_uint(const ColorF& color)
     return {(uint8_t)(color.r * 255), (uint8_t)(color.g * 255), (uint8_t)(color.b * 255)};
 }
 
-void do_inner_cube_gradient(Cube* cube)
+void do_s01e01(Cube* cube)
+{
+} // anonymous namespace
+
+void do_s01e02(Cube *cube)
+{
+}
+
+void do_s01e03(Cube *cube)
+{
+    while (true)
+    {
+        uint8_t x, y, z;
+
+        std::cout << "X";
+        std::cin >> x;
+
+        std::cout << "Y";
+        std::cin >> y;
+
+        std::cout << "Z";
+        std::cin >> z;
+
+        std::cout << "X : " << x << " y : " << y << " z : " << z << std::endl;
+
+        cube::lightTal(cube, {x, y, z}, {255, 255, 255});
+        cube::commit(cube);
+    }
+}
+
+void do_s01e04(Cube* cube)
 {
     ColorF start = {1, 0, 0};
     ColorF end = {1, 1, 0};
@@ -46,7 +79,7 @@ void do_inner_cube_gradient(Cube* cube)
             {
                 for (uint8_t z = 1; z < 3; ++z)
                 {
-                    cube::ligthTal(cube, {x, y, z}, color_float_to_uint(c));
+                    cube::lightTal(cube, {x, y, z}, color_float_to_uint(c));
                 }
             }
         }
@@ -65,20 +98,19 @@ void do_inner_cube_gradient(Cube* cube)
     }
 }
 
-void do_s01e01(Cube* cube)
-{
-} // anonymous namespace
-
 namespace episodes
 {
-void (*list_of_episodes[])(Cube*) = {
-    do_inner_cube_gradient,
-    do_s01e01,
-};
+    void (*list_of_episodes[])(Cube *) = 
+    {
+        do_s01e01,
+        do_s01e02,
+        do_s01e03,
+        do_s01e04,
+    };
 
-void start_episode(Cube* cube, Episode episode)
-{
-    printf("Starting episode %d\n", episode);
-    list_of_episodes[episode](cube);
-}
+    void start_episode(Cube *cube, Episode episode)
+    {
+        printf("Starting episode %d\n", episode);
+        list_of_episodes[episode](cube);
+    }
 } // namespace episodes

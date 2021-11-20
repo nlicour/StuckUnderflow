@@ -34,7 +34,8 @@ int main(int argc, char* argv[])
     {
         while (remote::poll_remote(remote_system, 0, &buttons));
     }
-    // episodes::start_episode(cube, Episode::INNER_CUBE_GRADIENT);
+
+    // episodes::start_episode(cube, Episode::S01E03);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

@@ -5,9 +5,7 @@ class Cube;
 
 enum Episode
 {
-    INNER_CUBE_GRADIENT = 0,
-
-    S01E01,
+    S01E01 = 0,
     S01E02,
     S01E03,
     S01E04,

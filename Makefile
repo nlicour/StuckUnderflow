@@ -42,7 +42,8 @@ TARGET := $(BIN_DIR)/$(TARGET_NAME)
 SOURCES := \
 	src/e131.cpp \
 	src/main.cpp \
-	src/cube.cpp
+	src/cube.cpp \
+	src/remote.cpp
 
 INCLUDE_DIRS := \
 	include

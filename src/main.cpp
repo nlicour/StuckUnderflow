@@ -40,15 +40,8 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    for(;;)
-    {
-        Color x;
-        x.r = 255;
-        x.g = 255;
-        x.b = 255;
-
-        cube::ligthTal(cube, 2, x);
-    }
+    cube::ligthTal(cube, 2, {255, 255, 255});
+    cube::commit(cube);
 
     cube::destroy(cube);
 

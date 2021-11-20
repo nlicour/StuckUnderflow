@@ -31,7 +31,7 @@ namespace cube
 
 
     void ligthLed(Cube* cube, Vec3 tal, unsigned int led, Color color);
-    void ligthLed(Cube *cube, unsigned int talIdex, unsigned int led, Color color);
+    void ligthLed(Cube *cube, unsigned int talIndex, unsigned int led, Color color);
 
     void ligthTal(Cube* cube, Vec3 tal, Color color);
     void ligthTal(Cube *cube, unsigned int talIdex, Color color);

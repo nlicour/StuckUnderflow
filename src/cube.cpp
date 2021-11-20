@@ -1,3 +1,4 @@
+#include <iostream>
 #include <unistd.h> // This must be included before 'e131.h'.
 #include "e131.h"
 #include "cube.h"
@@ -36,9 +37,11 @@ namespace cube
     {
         Cube *c = new Cube();
         c->universe1 = new UniverseConnexion();
+        c->universe1->universeId = 1;
         c->universe1->universeSize = 510;
         c->universe2 = new UniverseConnexion();
         c->universe2->universeSize = 66;
+        c->universe2->universeId = 2;
 
         c->tals = std::vector<Tal>();
 
@@ -59,11 +62,15 @@ namespace cube
 
     bool initUniverse(UniverseConnexion *cnx)
     {
+        std::cout << cnx->universeId << std::endl;
+        cnx->sockfd = e131_socket();
         if (cnx->sockfd < 0)
         {
             fprintf(stderr, "Couldn't create e131 socket.\n");
             return false;
         }
+        std::cout << cnx->sockfd << std::endl;
+
 
         if (e131_multicast_dest(&cnx->dest, cnx->universeId, E131_DEFAULT_PORT) < 0)
         {
@@ -71,7 +78,7 @@ namespace cube
             return false;
         }
 
-        if (e131_multicast_join(cnx->sockfd, 1) < 0)
+        if (e131_multicast_join(cnx->sockfd, cnx->universeId) < 0)
         {
             fprintf(stderr, "Couldn't join sockets to universes\n");
             return false;

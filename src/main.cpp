@@ -39,6 +39,17 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Couldn't initialize a cube\n");
         return -1;
     }
+
+    for(;;)
+    {
+        Color x;
+        x.r = 255;
+        x.g = 255;
+        x.b = 255;
+
+        cube::ligthTal(cube, 2, x);
+    }
+
     cube::destroy(cube);
 
     /* For reference, delete once cube.cpp will be complete.

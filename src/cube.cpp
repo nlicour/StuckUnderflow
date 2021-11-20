@@ -33,6 +33,33 @@ struct Cube
 
 namespace
 {
+    const uint32_t mapping[4][4][4] = {
+        {
+            {1, 35, 38, 40},
+            {15, 25, 33, 32},
+            {18, 23, 28, 31},
+            {20, 21, 22, 30},
+        },
+        {
+            {55, 45, 43, 41},
+            {5, 2, 36, 39},
+            {13, 16, 26, 34},
+            {12, 19, 24, 29},
+        },
+        {
+            {58, 53, 48, 42},
+            {63, 56, 46, 44},
+            {8, 6, 3, 37},
+            {11, 14, 17, 27},
+        },
+        {
+            {60, 52, 51, 50},
+            {61, 59, 54, 49},
+            {62, 64, 57, 47},
+            {10, 9, 7, 4},
+        },
+    };
+
     void send(const UniverseConnexion &cnx)
     {
         if (e131_pkt_validate(&cnx.packet) != E131_ERR_NONE
@@ -149,98 +176,7 @@ namespace cube
 
     unsigned int convertVec3ToIndex(const Vec3 &pos)
     {
-        switch (pos.z)
-        {
-        case 0:
-            if(pos.x == 0 && pos.y == 0) return 1;
-            if(pos.x == 1 && pos.y == 0) return 35;
-            if(pos.x == 2 && pos.y == 0) return 38;
-            if(pos.x == 3 && pos.y == 0) return 40;
-
-            if(pos.x == 0 && pos.y == 1) return 15;
-            if(pos.x == 1 && pos.y == 1) return 25;
-            if(pos.x == 2 && pos.y == 1) return 33;
-            if(pos.x == 3 && pos.y == 1) return 32;
-
-            if(pos.x == 0 && pos.y == 2) return 18;
-            if(pos.x == 1 && pos.y == 2) return 23;
-            if(pos.x == 2 && pos.y == 2) return 28;
-            if(pos.x == 3 && pos.y == 2) return 31;
-
-            if(pos.x == 0 && pos.y == 3) return 20;
-            if(pos.x == 1 && pos.y == 3) return 21;
-            if(pos.x == 2 && pos.y == 3) return 22;
-            if(pos.x == 3 && pos.y == 3) return 30;
-            break;
-        case 1:
-            if(pos.x == 0 && pos.y == 0) return 55;
-            if(pos.x == 1 && pos.y == 0) return 45;
-            if(pos.x == 2 && pos.y == 0) return 43;
-            if(pos.x == 3 && pos.y == 0) return 41;
-
-            if(pos.x == 0 && pos.y == 1) return 5;
-            if(pos.x == 1 && pos.y == 1) return 2;
-            if(pos.x == 2 && pos.y == 1) return 36;
-            if(pos.x == 3 && pos.y == 1) return 39;
-
-            if(pos.x == 0 && pos.y == 2) return 13;
-            if(pos.x == 1 && pos.y == 2) return 16;
-            if(pos.x == 2 && pos.y == 2) return 26;
-            if(pos.x == 3 && pos.y == 2) return 34;
-
-            if(pos.x == 0 && pos.y == 3) return 12;
-            if(pos.x == 1 && pos.y == 3) return 19;
-            if(pos.x == 2 && pos.y == 3) return 24;
-            if(pos.x == 3 && pos.y == 3) return 29;
-            break;
-
-        case 2:
-            if(pos.x == 0 && pos.y == 0) return 58;
-            if(pos.x == 1 && pos.y == 0) return 53;
-            if(pos.x == 2 && pos.y == 0) return 48;
-            if(pos.x == 3 && pos.y == 0) return 42;
-
-            if(pos.x == 0 && pos.y == 1) return 63;
-            if(pos.x == 1 && pos.y == 1) return 56;
-            if(pos.x == 2 && pos.y == 1) return 46;
-            if(pos.x == 3 && pos.y == 1) return 44;
-
-            if(pos.x == 0 && pos.y == 2) return 8;
-            if(pos.x == 1 && pos.y == 2) return 6;
-            if(pos.x == 2 && pos.y == 2) return 3;
-            if(pos.x == 3 && pos.y == 2) return 37;
-
-            if(pos.x == 0 && pos.y == 3) return 11;
-            if(pos.x == 1 && pos.y == 3) return 14;
-            if(pos.x == 2 && pos.y == 3) return 17;
-            if(pos.x == 3 && pos.y == 3) return 27;
-            break;
-
-        case 3:
-            if(pos.x == 0 && pos.y == 0) return 60;
-            if(pos.x == 1 && pos.y == 0) return 52;
-            if(pos.x == 2 && pos.y == 0) return 51;
-            if(pos.x == 3 && pos.y == 0) return 50;
-
-            if(pos.x == 0 && pos.y == 1) return 61;
-            if(pos.x == 1 && pos.y == 1) return 59;
-            if(pos.x == 2 && pos.y == 1) return 54;
-            if(pos.x == 3 && pos.y == 1) return 49;
-
-            if(pos.x == 0 && pos.y == 2) return 62;
-            if(pos.x == 1 && pos.y == 2) return 64;
-            if(pos.x == 2 && pos.y == 2) return 57;
-            if(pos.x == 3 && pos.y == 2) return 47;
-
-            if(pos.x == 0 && pos.y == 3) return 10;
-            if(pos.x == 1 && pos.y == 3) return 9;
-            if(pos.x == 2 && pos.y == 3) return 7;
-            if(pos.x == 3 && pos.y == 3) return 4;
-            break;
-        default:
-            break;
-        }
-        return 9;
+        return mapping[pos.z][pos.x][pos.y];
     }
 
     void ligthTal(Cube *cube, Vec3 tal, Color color)

@@ -52,6 +52,27 @@ void do_s01e02(Cube *cube, RemoteSystem *remote)
     cube::lightTal(cube, {2, 2, 2}, red);
     cube::lightTal(cube, {3, 3, 3}, red);
 
+    // Blanc x 18
+    cube::lightTal(cube, {3, 0, 0}, white);
+    cube::lightTal(cube, {3, 1, 0}, white);
+    cube::lightTal(cube, {3, 2, 0}, white);
+    cube::lightTal(cube, {3, 3, 0}, white);
+    cube::lightTal(cube, {2, 3, 0}, white);
+    cube::lightTal(cube, {1, 3, 0}, white);
+    cube::lightTal(cube, {0, 3, 0}, white);
+    cube::lightTal(cube, {3, 0, 1}, white);
+    cube::lightTal(cube, {3, 0, 2}, white);
+    cube::lightTal(cube, {3, 0, 3}, white);
+    cube::lightTal(cube, {2, 0, 3}, white);
+    cube::lightTal(cube, {1, 0, 3}, white);
+    cube::lightTal(cube, {0, 3, 1}, white);
+    cube::lightTal(cube, {0, 3, 2}, white);
+    cube::lightTal(cube, {0, 3, 3}, white);
+    cube::lightTal(cube, {0, 3, 3}, white);
+    cube::lightTal(cube, {0, 2, 3}, white);
+    cube::lightTal(cube, {0, 1, 3}, white);
+    cube::lightTal(cube, {0, 0, 3}, white);
+
     // Bleu x 9
     cube::lightTal(cube, {1, 0, 0}, blue);
     cube::lightTal(cube, {0, 1, 0}, blue);
@@ -67,26 +88,28 @@ void do_s01e02(Cube *cube, RemoteSystem *remote)
     cube::lightTal(cube, {1, 1, 0}, green);
     cube::lightTal(cube, {1, 0, 1}, green);
     cube::lightTal(cube, {0, 1, 1}, green);
+
     cube::lightTal(cube, {2, 2, 1}, green);
     cube::lightTal(cube, {2, 1, 2}, green);
     cube::lightTal(cube, {1, 2, 2}, green);
-    cube::lightTal(cube, {2, 2, 3}, green);
-    cube::lightTal(cube, {2, 3, 2}, green);
-    cube::lightTal(cube, {3, 2, 2}, green);
+
+    cube::lightTal(cube, {3, 3, 2}, green);
+    cube::lightTal(cube, {2, 3, 3}, green);
+    cube::lightTal(cube, {3, 2, 3}, green);
 
     // Cyan x 6
-    cube::lightTal(cube, {2, 2, 0}, cyan);
+    /*cube::lightTal(cube, {2, 2, 0}, cyan);
     cube::lightTal(cube, {2, 0, 2}, cyan);
     cube::lightTal(cube, {0, 2, 2}, cyan);
-    /*cube::lightTal(cube, {3, 3, 2}, cyan);
+    cube::lightTal(cube, {3, 3, 2}, cyan);
     cube::lightTal(cube, {3, 2, 3}, cyan);
     cube::lightTal(cube, {2, 3, 3}, cyan);*/
 
     // Magenta x 6
-    cube::lightTal(cube, {2, 0, 0}, magenta);
+    /*cube::lightTal(cube, {2, 0, 0}, magenta);
     cube::lightTal(cube, {0, 2, 0}, magenta);
     cube::lightTal(cube, {0, 0, 2}, magenta);
-    /*cube::lightTal(cube, {2, 3, 3}, magenta);
+    cube::lightTal(cube, {2, 3, 3}, magenta);
     cube::lightTal(cube, {3, 2, 3}, magenta);
     cube::lightTal(cube, {3, 3, 2}, magenta);*/
 
@@ -97,29 +120,6 @@ void do_s01e02(Cube *cube, RemoteSystem *remote)
     cube::lightTal(cube, {0, 2, 1}, yellow);
     cube::lightTal(cube, {1, 2, 0}, yellow);
     cube::lightTal(cube, {2, 1, 0}, yellow);*/
-
-    // Blanc x 18
-    cube::lightTal(cube, {3, 0, 0}, white);
-    cube::lightTal(cube, {3, 1, 0}, white);
-    cube::lightTal(cube, {3, 2, 0}, white);
-    cube::lightTal(cube, {3, 3, 0}, white);
-    cube::lightTal(cube, {2, 3, 0}, white);
-    cube::lightTal(cube, {1, 3, 0}, white);
-    cube::lightTal(cube, {0, 3, 0}, white);
-
-    cube::lightTal(cube, {3, 0, 1}, white);
-    cube::lightTal(cube, {3, 0, 2}, white);
-    cube::lightTal(cube, {3, 0, 3}, white);
-    cube::lightTal(cube, {3, 0, 3}, white);
-    cube::lightTal(cube, {2, 0, 3}, white);
-    cube::lightTal(cube, {1, 0, 3}, white);
-
-    cube::lightTal(cube, {0, 3, 1}, white);
-    cube::lightTal(cube, {0, 3, 2}, white);
-    cube::lightTal(cube, {0, 3, 3}, white);
-    cube::lightTal(cube, {0, 3, 3}, white);
-    cube::lightTal(cube, {0, 2, 3}, white);
-    cube::lightTal(cube, {0, 1, 3}, white);
 
     cube::commit(cube);
 }

@@ -29,6 +29,9 @@
 #include <arpa/inet.h>
 #include "e131.h"
 
+extern "C"
+{
+
 /* E1.31 Public Constants */
 const uint16_t E131_DEFAULT_PORT = 5568;
 const uint8_t E131_DEFAULT_PRIORITY = 0x64;
@@ -293,4 +296,5 @@ const char *e131_strerror(const e131_error_t error) {
     default:
       return "Unknown error";
   }
+}
 }

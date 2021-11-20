@@ -172,7 +172,7 @@ void commit(Cube *cube)
 {
     for (auto tal : cube->tals)
     {
-        int index = tal.index;
+        int index = tal.index * 3;
         // int index = convrtVec3ToIndex(tal);
 
         if (index > cube->universe1->universeSize)

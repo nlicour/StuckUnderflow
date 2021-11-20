@@ -35,7 +35,7 @@ int main(int argc, char* argv[])
     //     while (remote::poll_remote(remote_system, 0, &buttons));
     // }
 
-    episodes::start_episode(cube, remote_system, Episode::S01E03);
+    episodes::start_episode(cube, remote_system, Episode::S02E01);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

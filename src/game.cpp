@@ -204,6 +204,8 @@ namespace game
 
     void play_turn(GameState &gs, RemoteSystem *rs, Cube *cube)
     {
+        remote::toggle_led(rs, gs.currentPlayer->id, 7);
+
         Vec3 move = {0, 0, 0};
         bool hasValidatedMove = false;
         while (!hasValidatedMove)
@@ -227,6 +229,8 @@ namespace game
                 }
             }
         }
+
+        remote::toggle_led(rs, gs.currentPlayer->id, 0);
     }
 
     void drawPlayer(Player &player, Cube *cube)

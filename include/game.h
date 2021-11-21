@@ -21,6 +21,7 @@ struct GameState
     Player player1;
     Player player2;
     Cube* cube;
+    Color colorGrid[64];
 };
 
 namespace game

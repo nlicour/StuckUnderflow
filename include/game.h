@@ -30,8 +30,8 @@ namespace game
 
     void start(GameState* gameState);
 
-    void movePlayer(GameState* gameState, Vec3 move);
+    void movePlayer(GameState* gameState, Vec3 move, Cube*);
     void play_turn(GameState&, RemoteSystem*, Cube*);
 
-    void draw(GameState&, Cube*);
+    void draw(GameState*, Cube*);
 } // namespace game

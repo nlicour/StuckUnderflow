@@ -189,9 +189,13 @@ namespace game
 
     void movePlayer(GameState *gameState, Vec3 move, Cube *cube)
     {
-        gameState->currentPlayerPos.x = (gameState->currentPlayerPos.x + (move.x % 2)) % 4;
-        gameState->currentPlayerPos.y = (gameState->currentPlayerPos.y + (move.y % 2)) % 4;
-        gameState->currentPlayerPos.z = (gameState->currentPlayerPos.z + (move.z % 2)) % 4;
+        gameState->currentPlayerPos.x = (gameState->currentPlayerPos.x + move.x) % 4;
+        gameState->currentPlayerPos.y = (gameState->currentPlayerPos.y + move.y) % 4;
+        gameState->currentPlayerPos.z = (gameState->currentPlayerPos.z + move.z) % 4;
+
+        gameState->currentPlayerPos.x = gameState->currentPlayerPos.x < 0 ? 0 : gameState->currentPlayerPos.x;
+        gameState->currentPlayerPos.y = gameState->currentPlayerPos.y < 0 ? 0 : gameState->currentPlayerPos.y;
+        gameState->currentPlayerPos.z = gameState->currentPlayerPos.z < 0 ? 0 : gameState->currentPlayerPos.z;
 
         printf("Player: %d %d %d\n", gameState->currentPlayerPos.x, gameState->currentPlayerPos.y, gameState->currentPlayerPos.z);
 

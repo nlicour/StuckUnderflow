@@ -5,7 +5,7 @@
 #include <cstdio>
 #include <unistd.h>
 #include <utility>
-
+#include <cstdlib>
 #include <iostream>
 
 struct ColorF
@@ -330,10 +330,55 @@ void do_s02e02(Cube *cube, RemoteSystem *remote)
 
 void do_fun_01(Cube *cube, RemoteSystem *remote)
 {
+    Vec3 pos = {0, 0, 0};
+    ColorF c = {1, 1, 1};
+
+    uint8_t axis = rand() % 3;
+    uint8_t dir = 1;
+    for(;;)
+    {
+        if (pos.x == 0 || pos.x == 3
+            || pos.y == 0 || pos.y == 3
+            || pos.z == 0 || pos.z == 3)
+        {
+            axis = rand() % 3;
+            dir = rand() % 2 == 0 ? 1 : -1;
+        }
+
+        if (axis == 0) pos.x += dir;
+        else if (axis == 1) pos.y += dir;
+        else if (axis == 2) pos.z += dir;
+
+        cube::lightTal(cube, pos, color_float_to_uint(c));
+        cube::commit(cube);
+        
+        usleep(40000); /// 1/25 FPS.
+    }
 }
 
 void do_s02e03(Cube *cube, RemoteSystem *remote)
 {
+    for (;;)
+    {
+        uint16_t buttons = 0;
+
+        buttons = remote::get_remote_state(remote, 0);
+
+        if (buttons)
+        {
+            printf("%d\n", buttons);
+
+            uint8_t data = 0;
+
+            if (buttons & 0x1) data |= 0x1;
+            if (buttons & 0x2) data |= 0x2;
+            if (buttons & 0x4) data |= 0x4;
+
+            remote::toggle_led(remote, 0, data);
+        }
+
+        usleep(5000);
+    }
 }
 
 namespace episodes

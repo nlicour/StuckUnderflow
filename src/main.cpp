@@ -8,9 +8,13 @@
 #include <cstdio>
 #include <cstdint>
 #include <cstring>
+#include <cstdlib>
+#include <ctime>
 
 int main(int argc, char* argv[])
 {
+    srand(time(NULL));
+
     RemoteSystem* remote_system = remote::create_system();
 
     remote::connect(remote_system, 0);
@@ -23,7 +27,7 @@ int main(int argc, char* argv[])
         return -1;
     }
 
-    episodes::start_episode(cube, remote_system, Episode::S01E03);
+    episodes::start_episode(cube, remote_system, Episode::FUN_01);
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

@@ -29,7 +29,7 @@ struct RemoteListenerContext
     uint16_t buttons_state = 0;
 
     bool send;
-    bool send_led_data;
+    uint8_t send_led_data;
 };
 
 void* remote_listener_task(void* args)
@@ -44,6 +44,25 @@ void* remote_listener_task(void* args)
         if (recv(ctx->socket_handle, reply, sizeof(reply), 0) < 0)
         {
             fprintf(stderr, "Failed to receive.");
+        }
+
+        char msg[2];
+        printf(">>>>> %d\n", ctx->send_led_data);
+        msg[0] = '0' + ctx->send_led_data;
+        msg[1] = 0;
+
+        printf("Message: %s\n", msg);
+
+        if (ctx->send)
+        {
+            if (send(ctx->socket_handle, msg, strlen(msg), 0) < 0)
+            {
+                fprintf(stderr, "Couldn't send remote led data.\n");
+            }
+
+            printf("Sent successfully\n");
+
+            ctx->send = false;
         }
 
         ctx->buttons_state = std::strtoul(reply, NULL, 10);
@@ -156,7 +175,17 @@ uint16_t get_remote_state(RemoteSystem* rs, uint32_t remote_id)
     return state;
 }
 
-void toggle_led(RemoteSystem*, uint8_t led)
+void toggle_led(RemoteSystem* rs, uint8_t remote_id, uint8_t led)
 {
+    if (led > 7)
+    {
+        fprintf(stderr, "Invalid led data.\n");
+        return;
+    }
+
+    printf("Toggling led on: %x\n", led);
+
+    rs->contexts[remote_id]->send = true;
+    rs->contexts[remote_id]->send_led_data = led;
 }
 } // namespace remote

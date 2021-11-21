@@ -9,6 +9,12 @@ struct Color
     uint8_t r, g, b;
 };
 
+struct Tal
+{
+    int index;
+    Color leds[3];
+};
+
 struct Vec3
 {
     uint32_t x, y, z;

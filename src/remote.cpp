@@ -11,7 +11,6 @@
 
 namespace
 {
-constexpr uint8_t MAX_EVENT_QUEUE_SIZE = 64;
 constexpr uint8_t MAX_NUM_REMOTES = 5;
 
 const char* remotes_ips[] = {
@@ -21,62 +20,18 @@ const char* remotes_ips[] = {
     "192.168.88.244",
     "192.168.88.245",
 };
-
-struct RemoteListenerContext
-{
-    bool run;
-    int socket_handle;
-    uint16_t buttons_state = 0;
-
-    bool send;
-    uint8_t send_led_data;
-};
-
-void* remote_listener_task(void* args)
-{
-    RemoteListenerContext* ctx = (RemoteListenerContext*)args;
-
-    char reply[1024];
-
-    while (ctx->run)
-    {
-        // This is blocking.
-        if (recv(ctx->socket_handle, reply, sizeof(reply), 0) < 0)
-        {
-            fprintf(stderr, "Failed to receive.");
-        }
-
-        char msg[2];
-        printf(">>>>> %d\n", ctx->send_led_data);
-        msg[0] = '0' + ctx->send_led_data;
-        msg[1] = 0;
-
-        printf("Message: %s\n", msg);
-
-        if (ctx->send)
-        {
-            if (send(ctx->socket_handle, msg, strlen(msg), 0) < 0)
-            {
-                fprintf(stderr, "Couldn't send remote led data.\n");
-            }
-
-            printf("Sent successfully\n");
-
-            ctx->send = false;
-        }
-
-        ctx->buttons_state = std::strtoul(reply, NULL, 10);
-    }
-
-    pthread_exit(0);
-}
 } // anonymous namespace
 
+// @Note: the remote system is synchronous.
 struct RemoteSystem
 {
-    // @Todo: handle remotes deconnection.
-    pthread_t handles[MAX_NUM_REMOTES];
-    RemoteListenerContext* contexts[MAX_NUM_REMOTES];
+    struct RemoteListenerContext
+    {
+        int socket_handle;
+    };
+
+    uint8_t connected; // Bitfield.
+    RemoteListenerContext contexts[MAX_NUM_REMOTES];
 };
 
 namespace remote
@@ -118,14 +73,6 @@ bool connect(RemoteSystem* rs, uint32_t remote_id)
         return false;
     }
 
-    /*
-    const char* msg = "hello";
-    if (send(socket_handle, msg, strlen(msg), 0) < 0)
-    {
-        fprintf(stderr, "Fail to send message\n");
-    }
-    */
-
     char reply[1024];
     if (recv(socket_handle, reply, 1024, 0) < 0)
     {
@@ -138,54 +85,54 @@ bool connect(RemoteSystem* rs, uint32_t remote_id)
         return false;
     }
 
-    // It looks like a remote is already connected.
-    if (rs->contexts[remote_id] != NULL)
-    {
-        rs->handles[remote_id] = 0;
-        rs->contexts[remote_id]->run = false;
-    }
-
-    RemoteListenerContext* ctx = new RemoteListenerContext();
-    ctx->run = true;
-    ctx->socket_handle = socket_handle;
-    if(pthread_create(&rs->handles[remote_id], NULL, remote_listener_task, ctx) < 0)
-    {
-        fprintf(stderr, "Couldn't create remote thread.\n");
-        return false;
-    }
-    rs->contexts[remote_id] = ctx;
+    // @Todo: handle deconnections.
+    rs->connected |= (1 << remote_id);
+    rs->contexts[remote_id].socket_handle = socket_handle;
 
     printf("Remote %d connected!\n", remote_id);
     return true;
 }
 
-uint16_t get_remote_state(RemoteSystem* rs, uint32_t remote_id)
+uint16_t wait_for_state_change(RemoteSystem* rs, uint32_t remote_id)
 {
+    if ((rs->connected & (1 << remote_id)) == 0)
+    {
+        fprintf(stderr, "Remote %d not connected\n", remote_id);
+        return 0;
+    }
+
     if (remote_id >= MAX_NUM_REMOTES)
     {
         fprintf(stderr, "Invalid remote id %d\n", remote_id);
-        return false;
+        return 0;
     }
 
-    if (rs->contexts[remote_id] == NULL) return false;
+    char reply[32];
+    // This is blocking.
+    if (recv(rs->contexts[remote_id].socket_handle, reply, sizeof(reply), 0) < 0)
+    {
+        fprintf(stderr, "Failed to receive.");
+        return 0;
+    }
 
-    uint16_t state = rs->contexts[remote_id]->buttons_state;
-    // @Fixme: this is a dirty trick that works fine here :)
-    rs->contexts[remote_id]->buttons_state = 0;
-    return state;
+    return std::strtoul(reply, NULL, 10);
 }
 
-void toggle_led(RemoteSystem* rs, uint8_t remote_id, uint8_t led)
+void toggle_led(RemoteSystem* rs, uint8_t remote_id, uint8_t led_data)
 {
-    if (led > 7)
+    if (led_data > 7)
     {
         fprintf(stderr, "Invalid led data.\n");
         return;
     }
 
-    printf("Toggling led on: %x\n", led);
+    char msg[2];
+    msg[0] = '0' + led_data;
+    msg[1] = 0;
 
-    rs->contexts[remote_id]->send = true;
-    rs->contexts[remote_id]->send_led_data = led;
+    if (send(rs->contexts[remote_id].socket_handle, msg, strlen(msg), 0) < 0)
+    {
+        fprintf(stderr, "Couldn't send remote led data.\n");
+    }
 }
 } // namespace remote

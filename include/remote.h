@@ -10,7 +10,7 @@ namespace remote
 RemoteSystem* create_system();
 void destroy_system(RemoteSystem*);
 bool connect(RemoteSystem*, uint32_t remote_id);
-uint16_t get_remote_state(RemoteSystem*, uint32_t remote_id);
+uint16_t wait_for_state_change(RemoteSystem*, uint32_t remote_id);
 void toggle_led(RemoteSystem*, uint8_t remote_id, uint8_t led);
 } // namespace anonymous
 

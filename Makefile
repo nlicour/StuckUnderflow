@@ -44,6 +44,7 @@ SOURCES := \
 	src/main.cpp \
 	src/cube.cpp \
 	src/remote.cpp \
+	src/game.cpp \
 
 INCLUDE_DIRS := \
 	include

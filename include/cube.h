@@ -7,6 +7,13 @@ class Cube;
 struct Color
 {
     uint8_t r, g, b;
+
+    bool operator==(const Color& other)
+    {
+        return  r == other.r &&
+                g == other.g &&
+                b == other.b;
+    }
 };
 
 struct Tal

@@ -2,6 +2,8 @@
 
 #include <vector>
 #include <ctime>
+#include <vector>
+
 #include "cube.h"
 
 class RemoteSystem;
@@ -26,7 +28,7 @@ struct GameState
     bool run_start_animation;
 
     Cube* cube;
-    Color colorGrid[64];
+    std::vector<Color> colorGrid;
 };
 
 namespace game

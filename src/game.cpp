@@ -127,6 +127,8 @@ namespace game
         game->player2.dotColor = {128, 255, 0};
         game->player2.cursorColor = {0, 255, 0};
 
+        game->colorGrid.resize(64);
+
         return game;
     }
 
@@ -153,6 +155,7 @@ namespace game
     {
         Player *player = gameState->currentPlayer;
         player->tals.push_back(gameState->currentPlayerPos);
+        gameState->colorGrid[cube::vec3_to_tal_index(gameState->currentPlayerPos)];
 
         draw(gameState, cube);
     }
@@ -212,5 +215,57 @@ namespace game
     bool is_game_running(GameState* gs)
     {
         return !gs->run_start_animation;
+    }
+
+    // renvoie 0 si personne n'a gagné, 
+    // 1 si le joueur 1 a gagné,
+    // 2 si le joueur 2 a gagné, 
+    // 3 si égalité 
+    int checkGrid(GameState *gs)
+    {
+        int resPlayer1; 
+        int resPlayer2;
+        Color white = {255, 255, 255};
+        for (int i = 0; i < 4; i++)
+        {
+            for (int j = 0; j < 4; j++)
+            {
+                // Test en ligne 
+                if (gs->colorGrid[16*i + 4*j] == gs->colorGrid[16*i + 4*j +1] &&
+                gs->colorGrid[16*i + 4*j] == gs->colorGrid[16*i + 4*j +2] &&
+                gs->colorGrid[16*i + 4*j] == gs->colorGrid[16*i + 4*j +3] &&
+                !(gs->colorGrid[16*i + 4*j] == white))
+                {
+                    gs->colorGrid[16*i + 4*j] == gs->player1.dotColor ? resPlayer1++ : resPlayer2 += 2;
+                }
+
+                // Test en colonne 
+                if (gs->colorGrid[16*i + j] == gs->colorGrid[16*i + 4 + j] &&
+                    gs->colorGrid[16*i + j] == gs->colorGrid[16*i + 8 + j] &&
+                    gs->colorGrid[16*i + j] == gs->colorGrid[16*i + 12 + j] &&
+                    !(gs->colorGrid[16*i + j] == white))
+                {
+                    gs->colorGrid[16*i + j] == gs->player1.dotColor ? resPlayer1++ : resPlayer2 += 2;
+                }
+            }
+            // Diagonale gauche 
+            if (gs->colorGrid[16*i] == gs->colorGrid[16*i + 4 + 1] &&
+                gs->colorGrid[16*i] == gs->colorGrid[16*i + 8 + 2] &&
+                gs->colorGrid[16*i] == gs->colorGrid[16*i + 12 + 3] &&
+                !(gs->colorGrid[16*i] == white))
+            {
+                gs->colorGrid[16*i] == gs->player1.dotColor ? resPlayer1++ : resPlayer2 += 2;
+            }
+
+            // Diagonale droite   
+            if (gs->colorGrid[16*i + 4 - 1] == gs->colorGrid[16*i + 8 - 2] &&
+                gs->colorGrid[16*i + 4 - 1] == gs->colorGrid[16*i + 12 - 3] &&
+                gs->colorGrid[16*i + 4 - 1] == gs->colorGrid[16*i + 16 - 4] &&
+                !(gs->colorGrid[16*i + 4 - 1] == white))
+            {
+                gs->colorGrid[16*i + 4 - 1] == gs->player1.dotColor ? resPlayer1++ : resPlayer2 += 2;
+            }
+        }
+        return resPlayer1 + resPlayer2;
     }
 } // namespace game

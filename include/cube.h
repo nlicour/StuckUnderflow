@@ -7,6 +7,13 @@ class Cube;
 struct Color
 {
     uint8_t r, g, b;
+
+    bool operator==(const Color& other)
+    {
+        return  r == other.r &&
+                g == other.g &&
+                b == other.b;
+    }
 };
 
 struct Tal
@@ -35,6 +42,7 @@ namespace cube
     // Initialize a cube by setting up the socket connection, creating the universes, etc.
     bool init(Cube*);
 
+    uint8_t vec3_to_tal_index(const Vec3 &pos);
 
     void lightLed(Cube* cube, Vec3 tal, uint8_t led, Color color);
 

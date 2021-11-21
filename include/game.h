@@ -9,7 +9,7 @@ class Cube;
 struct Player
 {
     int id;
-    std::vector<Tal> tals;
+    std::vector<Vec3> tals;
     Color cursorColor;
     Color dotColor;
 };
@@ -17,6 +17,7 @@ struct Player
 struct GameState
 {
     Vec3 currentPlayerPos;
+    Player *currentPlayer;
     Tal currentTal;
     Player player1;
     Player player2;
@@ -26,13 +27,13 @@ struct GameState
 
 namespace game
 {
-    GameState *create_state();
+    GameState *create_state(uint8_t idJoueur1, uint8_t idJoueur2);
     void destroy_state(GameState *);
 
     void start(GameState* gameState);
 
-    void move(GameState* gameState, Vec3 move);
-    void play_turn(GameState&, RemoteSystem*);
+    void movePlayer(GameState* gameState, Vec3 move, Cube*);
+    void play_turn(GameState&, RemoteSystem*, Cube*);
 
-    void draw(GameState&, Cube*);
+    void draw(GameState*, Cube*);
 } // namespace game

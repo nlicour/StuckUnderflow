@@ -3,6 +3,9 @@
 #include <vector>
 #include "cube.h"
 
+class RemoteSystem;
+class Cube;
+
 struct Player
 {
     int id;
@@ -28,4 +31,7 @@ namespace game
     void start(GameState* gameState);
 
     void move(GameState* gameState, Vec3 move);
+    void play_turn(GameState&, RemoteSystem*);
+
+    void draw(GameState&, Cube*);
 } // namespace game

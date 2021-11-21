@@ -10,6 +10,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#include <iostream>
+
 #include "game.h"
 
 int main(int argc, char *argv[])
@@ -44,7 +46,13 @@ int main(int argc, char *argv[])
     {
         if (game::is_game_running(game))
         {
-            game::play_turn(*game, remote_system, cube);
+            if (game::play_turn(*game, remote_system, cube))
+            {
+                std::cout << "END !! " << std::endl;
+                game->run_end_animation = true;
+                break;
+            }
+            
             if (game->currentPlayer->id == game->player1.id)
             {
                 game->currentPlayer = &game->player2;
@@ -59,7 +67,7 @@ int main(int argc, char *argv[])
 
         usleep(25000);
     }
-
+    game::draw(game, cube);
     /*
     Vec3 pos[2] = {{0, 0, 0}, {3, 3, 3}};
     uint8_t remote_id = 0;

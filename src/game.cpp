@@ -51,7 +51,7 @@ namespace
         cube::commit(cube);
     }
 
-    void do_start_animation(GameState *gs, Cube *cube)
+    void do_start_animation(Cube *cube)
     {
         clear_cube(cube);
 
@@ -151,12 +151,6 @@ namespace
     }
 } // anonymous namespace
 
-void updateGrid(GameState *gameState)
-{
-
-    // gameState->cube
-}
-
 namespace game
 {
     GameState *create_state(uint8_t idJoueur1, uint8_t idJoueur2)
@@ -245,13 +239,14 @@ namespace game
     {
         if (gs->run_start_animation)
         {
-            do_start_animation(gs, cube);
+            do_start_animation(cube);
             gs->run_start_animation = false;
             draw(gs, cube);
         }
         else if (gs->run_end_animation)
         {
             do_end_animation(cube, gs->currentPlayer->dotColor);
+            exit(0); // Just because we're running late :)
         }
         else
         {
@@ -332,16 +327,13 @@ namespace game
 
             if (button)
             {
+                // Move around the 3D cube.
                 move.x = button == 256 ? 1 : (button == 64 ? -1 : 0);
                 move.y = button == 32 ? 1 : (button == 128 ? -1 : 0);
                 move.z = button == 2 ? 1 : (button == 1 ? -1 : 0);
-
-                // move.x = button & 0x1 ? 1 : (button & 0x8 ? -1 : 0);
-                // move.y = button & 0x2 ? 1 : (button & 0x16 ? -1 : 0);
-                // move.z = button & 0x4 ? 1 : (button & 0x32 ? -1 : 0);
-
                 movePlayer(&gs, move, cube);
-                // valide le jeton
+
+                // Validate user choice to play at the location of the cursor.
                 if (button & 0x4)
                 {
                     pasteDot(&gs, cube);
@@ -353,6 +345,8 @@ namespace game
                 }
                 else if ((button & 0x10) || (button & 0x8))
                 {
+                    // Winning condition checking doesn't work very well. *duh*
+                    // So just to be able to show it we add shortcut buttons.
                     gs.run_end_animation = true;
                     break;
                 }

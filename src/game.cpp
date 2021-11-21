@@ -197,6 +197,8 @@ namespace game
         gameState->currentPlayerPos.y = gameState->currentPlayerPos.y < 0 ? 3 : gameState->currentPlayerPos.y;
         gameState->currentPlayerPos.z = gameState->currentPlayerPos.z < 0 ? 3 : gameState->currentPlayerPos.z;
 
+        printf("Player: %d %d %d\n", gameState->currentPlayerPos.x, gameState->currentPlayerPos.y, gameState->currentPlayerPos.z);
+
         draw(gameState, cube);
     }
 
@@ -311,15 +313,13 @@ namespace game
 
     bool play_turn(GameState &gs, RemoteSystem *rs, Cube *cube)
     {
-        // remote::toggle_led(rs, gs.currentPlayer->id, 7);
+        remote::toggle_led(rs, gs.currentPlayer->id, 7);
 
         Vec3 move = {0, 0, 0};
         bool hasValidatedMove = false;
         while (!hasValidatedMove)
         {
             uint16_t button = remote::wait_for_state_change(rs, gs.currentPlayer->id);
-
-            printf("Button state: %d\n", button);
 
             if (button)
             {
@@ -346,7 +346,8 @@ namespace game
                 }
             }
         }
-        // remote::toggle_led(rs, gs.currentPlayer->id, 0);
+
+        remote::toggle_led(rs, gs.currentPlayer->id, 0);
         return false;
     }
 } // namespace game

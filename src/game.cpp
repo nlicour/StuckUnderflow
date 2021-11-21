@@ -55,29 +55,18 @@ void do_start_animation(GameState* gs, Cube* cube)
 {
     clear_cube(cube);
 
-    ColorF start = {0, 255, 255};
-    ColorF end = {200, 128, 0};
+    ColorF start = {0, 1, 1};
+    ColorF end = {0.8, 0.5, 0};
 
-    /*
-    uint32_t duration_ms = 5000;
-    uint32_t step = (uint32_t)(1/30.0f * duration_ms);
-    uint32_t steps = duration_ms / step;
-    */
     float t = 0;
-    for (uint32_t i = 0; i < 2000; ++i)
+    for (uint32_t i = 0; i < 100; ++i)
     {
         for (uint8_t x = 0; x < 4; ++x)
         {
-            if (x == 1 || x == 2) continue;
-
             for (uint8_t y = 0; y < 4; ++y)
             {
-                if (y == 1 || y == 2) continue;
-
                 for (uint8_t z = 0; z < 4; ++z)
                 {
-                    if (z == 1 || z == 2) continue;
-
                     cube::lightTal(cube, {x, y, z}, {255, 255, 255});
                 }
             }
@@ -102,15 +91,16 @@ void do_start_animation(GameState* gs, Cube* cube)
             }
         }
 
-        t += 0.001;
-        if (t >= 1)
+        t += 0.05;
+        if (t >= 1.0f)
         {
-            t = 0;
             std::swap(end, start);
+            t = 0.0f;
         }
 
+        usleep(50000);
+
         cube::commit(cube);
-        usleep(2500);
     }
 
     printf("Done\n");
@@ -174,6 +164,8 @@ namespace game
         while (!hasValidatedMove)
         {
             uint16_t button = remote::wait_for_state_change(rs, gs.currentPlayer->id);
+
+            printf("Button state: %d\n", button);
 
             if (button)
             {

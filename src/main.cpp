@@ -31,22 +31,23 @@ int main(int argc, char *argv[])
 
     // game::start(game);
 
-    Vec3 pos = {0, 0, 0};
+    Vec3 pos[2] = {{0, 0, 0}, {3, 3, 3}};
+    uint8_t remote_id = 0;
     for (;;)
     {
-        uint16_t buttons = remote::wait_for_state_change(remote_system, 0);
+        uint16_t buttons = remote::wait_for_state_change(remote_system, remote_id);
 
         if (buttons & 0x1)
-            pos.x = (pos.x + 1) % 4;
+            pos[remote_id].x = (pos[remote_id].x + 1) % 4;
         if (buttons & 0x2)
-            pos.y = (pos.y + 1) % 4;
+            pos[remote_id].y = (pos[remote_id].y + 1) % 4;
         if (buttons & 0x4)
-            pos.z = (pos.z + 1) % 4;
+            pos[remote_id].z = (pos[remote_id].z + 1) % 4;
 
-        cube::lightTal(cube, pos, {255, 0, 255});
+        cube::lightTal(cube, pos[remote_id], {255, 0, 255});
         cube::commit(cube);
 
-        usleep(25000);
+        remote_id = (remote_id + 1) % 2;
     }
 
     cube::destroy(cube);

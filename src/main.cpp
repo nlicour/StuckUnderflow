@@ -1,16 +1,13 @@
 #include "cube.h"
 #include "remote.h"
 
-#include <unistd.h> // This must be included before 'e131.h'.
-#include "e131.h"
+#include <unistd.h>
 
 #include <cstdio>
 #include <cstdint>
 #include <cstring>
 #include <cstdlib>
 #include <ctime>
-
-#include <iostream>
 
 #include "game.h"
 
@@ -48,7 +45,6 @@ int main(int argc, char *argv[])
         {
             if (game::play_turn(*game, remote_system, cube))
             {
-                std::cout << "END !! " << std::endl;
                 game->run_end_animation = true;
                 break;
             }

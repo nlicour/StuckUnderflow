@@ -137,6 +137,8 @@ namespace game
         game->player2.dotColor = {128, 255, 0};
         game->player2.cursorColor = {0, 255, 0};
 
+        game->colorGrid.resize(64);
+
         return game;
     }
 
@@ -163,6 +165,7 @@ namespace game
     {
         Player *player = gameState->currentPlayer;
         player->tals.push_back(gameState->currentPlayerPos);
+        gameState->colorGrid[cube::vec3_to_tal_index(gameState->currentPlayerPos)];
 
         draw(gameState, cube);
     }

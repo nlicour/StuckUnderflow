@@ -13,11 +13,12 @@ struct Player
 
 struct GameState
 {
+    Vec3 currentPlayerPos;
     Tal currentTal;
     Player player1;
     Player player2;
+    Cube* cube;
 };
-
 
 namespace game
 {
@@ -26,4 +27,5 @@ namespace game
 
     void start(GameState* gameState);
 
+    void move(GameState* gameState, Vec3 move);
 } // namespace game

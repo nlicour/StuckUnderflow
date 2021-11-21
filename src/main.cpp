@@ -12,33 +12,36 @@
 
 #include "game.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
     srand(time(NULL));
 
-    RemoteSystem* remote_system = remote::create_system();
+    RemoteSystem *remote_system = remote::create_system();
     remote::connect(remote_system, 0);
     remote::connect(remote_system, 1);
 
-    Cube* cube = cube::create();
+    Cube *cube = cube::create();
     if (!cube::init(cube))
     {
         fprintf(stderr, "Couldn't initialize a cube\n");
         return -1;
     }
 
-    GameState* game = game::create_state();
+    GameState *game = game::create_state();
 
-    game::start(game);
+    // game::start(game);
 
     Vec3 pos = {0, 0, 0};
     for (;;)
     {
         uint16_t buttons = remote::wait_for_state_change(remote_system, 0);
 
-        if (buttons & 0x1) pos.x = (pos.x + 1) % 4;
-        if (buttons & 0x2) pos.y = (pos.y + 1) % 4;
-        if (buttons & 0x4) pos.z = (pos.z + 1) % 4;
+        if (buttons & 0x1)
+            pos.x = (pos.x + 1) % 4;
+        if (buttons & 0x2)
+            pos.y = (pos.y + 1) % 4;
+        if (buttons & 0x4)
+            pos.z = (pos.z + 1) % 4;
 
         cube::lightTal(cube, pos, {255, 0, 255});
         cube::commit(cube);

@@ -26,6 +26,7 @@ struct GameState
     Player player2;
 
     bool run_start_animation;
+    bool run_end_animation;
 
     Cube* cube;
     std::vector<Color> colorGrid;

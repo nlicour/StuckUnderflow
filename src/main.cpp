@@ -21,8 +21,12 @@ int main(int argc, char *argv[])
     uint8_t remote1Index = 0;
     uint8_t remote2Index = 1;
 
-    // remote::connect(remote_system, remote1Index);
-    // remote::connect(remote_system, remote2Index);
+    if (!remote::connect(remote_system, remote1Index) ||
+        !remote::connect(remote_system, remote2Index))
+    {
+        fprintf(stderr, "Couldn't initialize a connexion\n");
+        return -1;
+    }
 
     Cube *cube = cube::create();
     if (!cube::init(cube))
@@ -33,6 +37,10 @@ int main(int argc, char *argv[])
 
     GameState *game = game::create_state(remote1Index, remote2Index);
     game::reset(game);
+
+    // game::start(game);
+
+    game->currentPlayer = &game->player1;
 
     for (;;)
     {
@@ -54,8 +62,10 @@ int main(int argc, char *argv[])
         usleep(25000);
     }
 
+    /*
     Vec3 pos[2] = {{0, 0, 0}, {3, 3, 3}};
     uint8_t remote_id = 0;
+    Vec3 pos = {0, 0, 0};
     for (;;)
     {
         uint16_t buttons = remote::wait_for_state_change(remote_system, remote_id);
@@ -72,6 +82,7 @@ int main(int argc, char *argv[])
 
         remote_id = (remote_id + 1) % 2;
     }
+    */
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

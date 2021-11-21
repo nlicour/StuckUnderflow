@@ -24,6 +24,9 @@ struct GameState
     Player player2;
 
     bool run_start_animation;
+
+    Cube* cube;
+    Color colorGrid[64];
 };
 
 namespace game
@@ -33,7 +36,7 @@ namespace game
 
     void reset(GameState* gameState);
 
-    void movePlayer(GameState* gameState, Vec3 move);
+    void movePlayer(GameState* gameState, Vec3 move, Cube*);
     void play_turn(GameState&, RemoteSystem*, Cube*);
 
     void draw(GameState*, Cube*);

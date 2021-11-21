@@ -23,7 +23,12 @@ struct GameState
 
 namespace game
 {
-void play_turn(GameState&, RemoteSystem*);
+    GameState *create_state();
+    void destroy_state(GameState *);
 
-void draw(GameState&, Cube*);
+    void start(GameState* gameState);
+
+    void play_turn(GameState&, RemoteSystem*);
+
+    void draw(GameState&, Cube*);
 } // namespace game

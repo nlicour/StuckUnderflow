@@ -10,6 +10,8 @@
 #include <cstdlib>
 #include <ctime>
 
+#include "game.h"
+
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
@@ -24,6 +26,10 @@ int main(int argc, char* argv[])
         fprintf(stderr, "Couldn't initialize a cube\n");
         return -1;
     }
+
+    GameState* game = game::create_state();
+
+    game::start(game);
 
     Vec3 pos = {0, 0, 0};
     for (;;)

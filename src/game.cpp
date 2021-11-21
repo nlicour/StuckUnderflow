@@ -2,11 +2,25 @@
 
 namespace game
 {
-void play_turn(GameState& gs, RemoteSystem* rs)
-{
-}
+    GameState *create_state()
+    {
+        return new GameState();
+    }
 
-void draw(GameState& gs, Cube* cube)
-{
-}
+    void destroy_system(GameState *rs)
+    {
+        delete rs;
+    }
+
+    void start(GameState* gameState){
+        
+    }
+
+    void play_turn(GameState& gs, RemoteSystem* rs)
+    {
+    }
+
+    void draw(GameState& gs, Cube* cube)
+    {
+    }
 } // namespace game

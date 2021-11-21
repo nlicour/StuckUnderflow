@@ -193,9 +193,15 @@ namespace game
         gameState->currentPlayerPos.y = (gameState->currentPlayerPos.y + move.y) % 4;
         gameState->currentPlayerPos.z = (gameState->currentPlayerPos.z + move.z) % 4;
 
+        while (gameState->currentPlayerPos.x < 0) gameState->currentPlayerPos.x += 4;
+        while (gameState->currentPlayerPos.y < 0) gameState->currentPlayerPos.y += 4;
+        while (gameState->currentPlayerPos.z < 0) gameState->currentPlayerPos.z += 4;
+
+        /*
         gameState->currentPlayerPos.x = gameState->currentPlayerPos.x < 0 ? 0 : gameState->currentPlayerPos.x;
         gameState->currentPlayerPos.y = gameState->currentPlayerPos.y < 0 ? 0 : gameState->currentPlayerPos.y;
         gameState->currentPlayerPos.z = gameState->currentPlayerPos.z < 0 ? 0 : gameState->currentPlayerPos.z;
+        */
 
         printf("Player: %d %d %d\n", gameState->currentPlayerPos.x, gameState->currentPlayerPos.y, gameState->currentPlayerPos.z);
 
@@ -331,11 +337,9 @@ namespace game
                 // move.y = button & 0x2 ? 1 : (button & 0x16 ? -1 : 0);
                 // move.z = button & 0x4 ? 1 : (button & 0x32 ? -1 : 0);
 
-                std::cout << move.x << " - " << move.y << " - " << move.z << std::endl;
-
                 movePlayer(&gs, move, cube);
                 // valide le jeton
-                if (button == 4)
+                if (button & 0x4)
                 {
                     pasteDot(&gs, cube);
                     if (checkGrid(&gs) > 0)
@@ -343,6 +347,11 @@ namespace game
                         return true;
                     }
                     hasValidatedMove = true;
+                }
+                else if ((button & 0x10) || (button & 0x8))
+                {
+                    gs.run_end_animation = true;
+                    break;
                 }
             }
         }

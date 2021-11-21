@@ -8,13 +8,6 @@
 
 using namespace std;
 
-struct Tal
-{
-    // Vec3 pos;
-    int index;
-    Color leds[3];
-};
-
 struct UniverseConnexion
 {
     uint16_t universeId;
@@ -33,32 +26,32 @@ struct Cube
 
 namespace
 {
-    const uint32_t mapping[4][4][4] = 
-    {
+    const uint32_t mapping[4][4][4] =
         {
-            {1, 35, 38, 40},
-            {15, 25, 33, 32},
-            {18, 23, 28, 31},
-            {20, 21, 22, 30},
-        },
-        {
-            {55, 45, 43, 41},
-            {5, 2, 36, 39},
-            {13, 16, 26, 34},
-            {12, 19, 24, 29},
-        },
-        {
-            {58, 53, 48, 42},
-            {63, 56, 46, 44},
-            {8, 6, 3, 37},
-            {11, 14, 17, 27},
-        },
-        {
-            {60, 52, 51, 50},
-            {61, 59, 54, 49},
-            {62, 64, 57, 47},
-            {10, 9, 7, 4},
-        },
+            {
+                {1, 35, 38, 40},
+                {15, 25, 33, 32},
+                {18, 23, 28, 31},
+                {20, 21, 22, 30},
+            },
+            {
+                {55, 45, 43, 41},
+                {5, 2, 36, 39},
+                {13, 16, 26, 34},
+                {12, 19, 24, 29},
+            },
+            {
+                {58, 53, 48, 42},
+                {63, 56, 46, 44},
+                {8, 6, 3, 37},
+                {11, 14, 17, 27},
+            },
+            {
+                {60, 52, 51, 50},
+                {61, 59, 54, 49},
+                {62, 64, 57, 47},
+                {10, 9, 7, 4},
+            },
     };
 
     void send(const UniverseConnexion &cnx)
@@ -188,6 +181,28 @@ namespace cube
     bool isVecValid(Vec3 &tal)
     {
         return tal.x <= 3 && tal.y <= 3 && tal.z <= 3;
+    }
+
+    void lightLayer(Cube *cube, uint8_t layer, Color color)
+    {
+        switch (layer)
+        {
+        case 0:
+            cube::lightTal(cube, {3, 3, 3}, color);
+            break;
+        case 1:
+            cube::lightTal(cube, {3, 3, 2}, color);
+            cube::lightTal(cube, {2, 3, 3}, color);
+            cube::lightTal(cube, {3, 2, 3}, color);
+            break;
+        case 2:
+            cube::lightTal(cube, {1, 2, 3}, color);
+            cube::lightTal(cube, {2, 1, 3}, color);
+            cube::lightTal(cube, {3, 1, 2}, color);
+            cube::lightTal(cube, {1, 3, 2}, color);
+            cube::lightTal(cube, {2, 3, 1}, color);
+            cube::lightTal(cube, {3, 2, 1}, color);
+        }
     }
 
     void lightTal(Cube *cube, Vec3 tal, Color color)

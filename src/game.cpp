@@ -193,9 +193,9 @@ namespace game
         gameState->currentPlayerPos.y = (gameState->currentPlayerPos.y + move.y) % 4;
         gameState->currentPlayerPos.z = (gameState->currentPlayerPos.z + move.z) % 4;
 
-        gameState->currentPlayerPos.x = gameState->currentPlayerPos.x < 0 ? 0 : gameState->currentPlayerPos.x;
-        gameState->currentPlayerPos.y = gameState->currentPlayerPos.y < 0 ? 0 : gameState->currentPlayerPos.y;
-        gameState->currentPlayerPos.z = gameState->currentPlayerPos.z < 0 ? 0 : gameState->currentPlayerPos.z;
+        gameState->currentPlayerPos.x = gameState->currentPlayerPos.x < 0 ? 3 : gameState->currentPlayerPos.x;
+        gameState->currentPlayerPos.y = gameState->currentPlayerPos.y < 0 ? 3 : gameState->currentPlayerPos.y;
+        gameState->currentPlayerPos.z = gameState->currentPlayerPos.z < 0 ? 3 : gameState->currentPlayerPos.z;
 
         draw(gameState, cube);
     }
@@ -323,7 +323,7 @@ namespace game
 
             if (button)
             {
-                move.x = button == 512 ? 1 : (button == 64 ? -1 : 0);
+                move.x = button == 256 ? 1 : (button == 64 ? -1 : 0);
                 move.y = button == 32 ? 1 : (button == 128 ? -1 : 0);
                 move.z = button == 2 ? 1 : (button == 1 ? -1 : 0);
 

@@ -8,13 +8,6 @@
 
 using namespace std;
 
-struct Tal
-{
-    // Vec3 pos;
-    int index;
-    Color leds[3];
-};
-
 struct UniverseConnexion
 {
     uint16_t universeId;

@@ -105,6 +105,11 @@ void do_start_animation(GameState* gs, Cube* cube)
 
     printf("Done\n");
 }
+
+void do_end_animation(Cube* cube)
+{
+    // @Todo(cocotropico)
+}
 } // anonymous namespace
 
 void updateGrid(GameState* gameState){
@@ -140,6 +145,7 @@ namespace game
     void reset(GameState* gs)
     {
         gs->run_start_animation = true;
+        gs->run_end_animation = false;
     }
 
     void movePlayer(GameState *gameState, Vec3 move, Cube *cube)
@@ -203,6 +209,10 @@ namespace game
             gs->run_start_animation = false;
             draw(gs, cube);
         }
+        else if (gs->run_end_animation)
+        {
+            do_end_animation(cube);
+        }
         else
         {
             drawPlayer(gs->player1, cube);
@@ -214,7 +224,7 @@ namespace game
 
     bool is_game_running(GameState* gs)
     {
-        return !gs->run_start_animation;
+        return !gs->run_start_animation && !gs->run_end_animation;
     }
 
     // renvoie 0 si personne n'a gagné, 

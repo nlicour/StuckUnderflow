@@ -17,8 +17,12 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     RemoteSystem *remote_system = remote::create_system();
-    remote::connect(remote_system, 0);
-    remote::connect(remote_system, 1);
+
+    uint8_t remote1Index = 0;
+    uint8_t remote2Index = 1;
+
+    remote::connect(remote_system, remote1Index);
+    remote::connect(remote_system, remote2Index);
 
     Cube *cube = cube::create();
     if (!cube::init(cube))
@@ -27,7 +31,20 @@ int main(int argc, char *argv[])
         return -1;
     }
 
-    GameState *game = game::create_state();
+    GameState *game = game::create_state(remote1Index, remote2Index);
+
+    for (;;)
+    {
+        game::play_turn(*game, remote_system, cube);
+        if (game->currentPlayer->id == game->player1.id)
+        {
+            game->currentPlayer = &game->player2;
+        }
+        else
+        {
+            game->currentPlayer = &game->player1;
+        }
+    }
 
     // game::start(game);
 

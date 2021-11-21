@@ -34,5 +34,7 @@ namespace cube
 
     void lightTal(Cube* cube, Vec3 tal, Color color);
 
+    void lightLayer(Cube* cube, uint8_t layer, Color color);
+
     void commit(Cube *cube);
 } // namespace cube

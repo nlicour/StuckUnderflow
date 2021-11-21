@@ -40,7 +40,7 @@ int main(int argc, char *argv[])
     // game::start(game);
 
     game->currentPlayer = &game->player1;
-
+    game::draw(game, cube);
     for (;;)
     {
         game::play_turn(*game, remote_system, cube);

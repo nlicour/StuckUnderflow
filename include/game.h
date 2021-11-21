@@ -1,6 +1,7 @@
 #pragma once
 
 #include <vector>
+#include <ctime>
 #include "cube.h"
 
 class RemoteSystem;
@@ -21,6 +22,8 @@ struct GameState
     Player player1;
     Player player2;
     Cube* cube;
+
+    bool run_start_animation;
 };
 
 namespace game
@@ -28,10 +31,10 @@ namespace game
     GameState *create_state();
     void destroy_state(GameState *);
 
-    void start(GameState* gameState);
+    void reset(GameState* gameState);
 
     void move(GameState* gameState, Vec3 move);
     void play_turn(GameState&, RemoteSystem*);
 
-    void draw(GameState&, Cube*);
+    void draw(GameState*, Cube*);
 } // namespace game

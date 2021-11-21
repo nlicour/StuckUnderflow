@@ -17,8 +17,8 @@ int main(int argc, char *argv[])
     srand(time(NULL));
 
     RemoteSystem *remote_system = remote::create_system();
-    remote::connect(remote_system, 0);
-    remote::connect(remote_system, 1);
+    // remote::connect(remote_system, 0);
+    // remote::connect(remote_system, 1);
 
     Cube *cube = cube::create();
     if (!cube::init(cube))
@@ -29,7 +29,13 @@ int main(int argc, char *argv[])
 
     GameState *game = game::create_state();
 
-    // game::start(game);
+    game::reset(game);
+    for (;;)
+    {
+        game::draw(game, cube);
+
+        usleep(2500);
+    }
 
     Vec3 pos[2] = {{0, 0, 0}, {3, 3, 3}};
     uint8_t remote_id = 0;

@@ -213,7 +213,20 @@ namespace game
         }
     }
 
-    void draw(GameState *gs, Cube *cube)
+    void lightLayer(Cube* cube, uint8_t z)
+    {
+        if (z > 3) return;
+
+        for (uint8_t x = 0; x < 4; ++x)
+        {
+            for (uint8_t y = 0; y < 4; ++y)
+            {
+                cube::lightTal(cube, {x, y, z}, {100, 100, 100});
+            }
+        }
+    }
+
+    void draw(GameState* gs, Cube* cube)
     {
         if (gs->run_start_animation)
         {
@@ -227,6 +240,7 @@ namespace game
         }
         else
         {
+            lightLayer(cube, gs->currentPlayerPos.z);
             drawPlayer(gs->player1, cube);
             drawPlayer(gs->player2, cube);
             cube::lightTal(cube, gs->currentPlayerPos, gs->currentPlayer->cursorColor);

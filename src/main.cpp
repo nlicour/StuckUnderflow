@@ -36,6 +36,7 @@ int main(int argc, char *argv[])
     }
 
     GameState *game = game::create_state(remote1Index, remote2Index);
+    game::reset(game);
 
     // game::start(game);
 
@@ -43,34 +44,45 @@ int main(int argc, char *argv[])
     game::draw(game, cube);
     for (;;)
     {
-        game::play_turn(*game, remote_system, cube);
-        if (game->currentPlayer->id == game->player1.id)
+        if (game::is_game_running(game))
         {
-            game->currentPlayer = &game->player2;
+            game::play_turn(*game, remote_system, cube);
+            if (game->currentPlayer->id == game->player1.id)
+            {
+                game->currentPlayer = &game->player2;
+            }
+            else
+            {
+                game->currentPlayer = &game->player1;
+            }
         }
-        else
-        {
-            game->currentPlayer = &game->player1;
-        }
-    }
 
-    Vec3 pos = {0, 0, 0};
-    for (;;)
-    {
-        uint16_t buttons = remote::wait_for_state_change(remote_system, 0);
-
-        if (buttons & 0x1)
-            pos.x = (pos.x + 1) % 4;
-        if (buttons & 0x2)
-            pos.y = (pos.y + 1) % 4;
-        if (buttons & 0x4)
-            pos.z = (pos.z + 1) % 4;
-
-        cube::lightTal(cube, pos, {255, 0, 255});
-        cube::commit(cube);
+        game::draw(game, cube);
 
         usleep(25000);
     }
+
+    /*
+    Vec3 pos[2] = {{0, 0, 0}, {3, 3, 3}};
+    uint8_t remote_id = 0;
+    Vec3 pos = {0, 0, 0};
+    for (;;)
+    {
+        uint16_t buttons = remote::wait_for_state_change(remote_system, remote_id);
+
+        if (buttons & 0x1)
+            pos[remote_id].x = (pos[remote_id].x + 1) % 4;
+        if (buttons & 0x2)
+            pos[remote_id].y = (pos[remote_id].y + 1) % 4;
+        if (buttons & 0x4)
+            pos[remote_id].z = (pos[remote_id].z + 1) % 4;
+
+        cube::lightTal(cube, pos[remote_id], {255, 0, 255});
+        cube::commit(cube);
+
+        remote_id = (remote_id + 1) % 2;
+    }
+    */
 
     cube::destroy(cube);
     remote::destroy_system(remote_system);

@@ -177,7 +177,6 @@ namespace game
 
             if (button)
             {
-                std::cout << "Recieved from " << gs.currentPlayer->id << " - " << button << std::endl;
                 move.x = button & 0x1 ? 1 : 0;
                 move.y = button & 0x2 ? 1 : 0;
                 move.z = button & 0x4 ? 1 : 0;
@@ -205,8 +204,9 @@ namespace game
     {
         if (gs->run_start_animation)
         {
-            // do_start_animation(gs, cube);
+            do_start_animation(gs, cube);
             gs->run_start_animation = false;
+            draw(gs, cube);
         }
         else
         {

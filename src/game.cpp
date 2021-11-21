@@ -162,11 +162,11 @@ namespace game
         game->player1.id = idJoueur1;
         game->player2.id = idJoueur2;
 
-        game->player1.dotColor = {255, 0, 0};
-        game->player1.cursorColor = {255, 128, 0};
+        game->player1.dotColor = {255, 128, 0};
+        game->player1.cursorColor = {255, 0, 0};
 
-        game->player2.dotColor = {128, 255, 0};
-        game->player2.cursorColor = {0, 255, 0};
+        game->player2.dotColor = {0, 255, 255};
+        game->player2.cursorColor = {0, 0, 255};
 
         game->colorGrid.resize(64);
 
@@ -202,41 +202,6 @@ namespace game
         draw(gameState, cube);
     }
 
-    bool play_turn(GameState &gs, RemoteSystem *rs, Cube *cube)
-    {
-        remote::toggle_led(rs, gs.currentPlayer->id, 7);
-
-        Vec3 move = {0, 0, 0};
-        bool hasValidatedMove = false;
-        while (!hasValidatedMove)
-        {
-            uint16_t button = remote::wait_for_state_change(rs, gs.currentPlayer->id);
-
-            printf("Button state: %d\n", button);
-
-            if (button)
-            {
-                move.x = button & 0x1 ? 1 : 0;
-                move.y = button & 0x2 ? 1 : 0;
-                move.z = button & 0x4 ? 1 : 0;
-
-                movePlayer(&gs, move, cube);
-                // valide le jeton
-                if (button == 128)
-                {
-                    pasteDot(&gs, cube);
-                    if (checkGrid(&gs) > 0)
-                    {
-                        return true;
-                    }
-                    hasValidatedMove = true;
-                }
-            }
-        }
-        remote::toggle_led(rs, gs.currentPlayer->id, 0);
-        return false;
-    }
-
     void drawPlayer(Player &player, Cube *cube)
     {
         for (auto tal : player.tals)
@@ -255,7 +220,7 @@ namespace game
         }
         else if (gs->run_end_animation)
         {
-            do_end_animation(cube, {255, 0, 0});
+            do_end_animation(cube, gs->currentPlayer->dotColor);
         }
         else
         {
@@ -321,5 +286,40 @@ namespace game
             }
         }
         return resPlayer;
+    }
+
+    bool play_turn(GameState &gs, RemoteSystem *rs, Cube *cube)
+    {
+        remote::toggle_led(rs, gs.currentPlayer->id, 7);
+
+        Vec3 move = {0, 0, 0};
+        bool hasValidatedMove = false;
+        while (!hasValidatedMove)
+        {
+            uint16_t button = remote::wait_for_state_change(rs, gs.currentPlayer->id);
+
+            printf("Button state: %d\n", button);
+
+            if (button)
+            {
+                move.x = button & 0x1 ? 1 : 0;
+                move.y = button & 0x2 ? 1 : 0;
+                move.z = button & 0x4 ? 1 : 0;
+
+                movePlayer(&gs, move, cube);
+                // valide le jeton
+                if (button == 128)
+                {
+                    pasteDot(&gs, cube);
+                    if (checkGrid(&gs) > 0)
+                    {
+                        return true;
+                    }
+                    hasValidatedMove = true;
+                }
+            }
+        }
+        remote::toggle_led(rs, gs.currentPlayer->id, 0);
+        return false;
     }
 } // namespace game

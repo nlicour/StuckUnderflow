@@ -55,23 +55,6 @@ void do_start_animation(GameState* gs, Cube* cube)
 {
     clear_cube(cube);
 
-    for (uint8_t x = 0; x < 4; ++x)
-    {
-        if (x == 1 || x == 2) continue;
-
-        for (uint8_t y = 0; y < 4; ++y)
-        {
-            if (y == 1 || y == 2) continue;
-
-            for (uint8_t z = 0; z < 4; ++z)
-            {
-                if (z == 1 || z == 2) continue;
-
-                cube::lightTal(cube, {x, y, z}, {255, 255, 255});
-            }
-        }
-    }
-
     ColorF start = {0, 255, 255};
     ColorF end = {200, 128, 0};
 
@@ -81,8 +64,25 @@ void do_start_animation(GameState* gs, Cube* cube)
     uint32_t steps = duration_ms / step;
     */
     float t = 0;
-    for (uint32_t i = 0; i < 200; ++i)
+    for (uint32_t i = 0; i < 2000; ++i)
     {
+        for (uint8_t x = 0; x < 4; ++x)
+        {
+            if (x == 1 || x == 2) continue;
+
+            for (uint8_t y = 0; y < 4; ++y)
+            {
+                if (y == 1 || y == 2) continue;
+
+                for (uint8_t z = 0; z < 4; ++z)
+                {
+                    if (z == 1 || z == 2) continue;
+
+                    cube::lightTal(cube, {x, y, z}, {255, 255, 255});
+                }
+            }
+        }
+
         ColorF c = blend_color(start, end, t);
 
         for (uint8_t x = 0; x < 4; ++x)
@@ -102,7 +102,7 @@ void do_start_animation(GameState* gs, Cube* cube)
             }
         }
 
-        t += 0.01;
+        t += 0.001;
         if (t >= 1)
         {
             t = 0;
@@ -110,7 +110,7 @@ void do_start_animation(GameState* gs, Cube* cube)
         }
 
         cube::commit(cube);
-        usleep(25000);
+        usleep(2500);
     }
 
     printf("Done\n");
@@ -198,7 +198,7 @@ namespace game
     {
         if (gs->run_start_animation)
         {
-            do_start_animation(gs, cube);
+            // do_start_animation(gs, cube);
             gs->run_start_animation = false;
         }
         else

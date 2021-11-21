@@ -38,8 +38,6 @@ int main(int argc, char *argv[])
     GameState *game = game::create_state(remote1Index, remote2Index);
     game::reset(game);
 
-    // game::start(game);
-
     game->currentPlayer = &game->player1;
 
     for (;;)

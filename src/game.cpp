@@ -186,7 +186,7 @@ namespace game
 
                 movePlayer(&gs, move, cube);
                 // valide le jeton
-                if (button & 0x8)
+                if (button == 128)
                 {
                     pasteDot(&gs, cube);
                     hasValidatedMove = true;

@@ -244,7 +244,7 @@ namespace game
     {
         int resPlayer = 0;
         
-        Color white = {255, 255, 255};
+        Color black = {0, 0, 0};
         for (int i = 0; i < 4; i++)
         {
             for (int j = 0; j < 4; j++)
@@ -253,7 +253,7 @@ namespace game
                 if (gs->colorGrid[16*i + 4*j] == gs->colorGrid[16*i + 4*j +1] &&
                 gs->colorGrid[16*i + 4*j] == gs->colorGrid[16*i + 4*j +2] &&
                 gs->colorGrid[16*i + 4*j] == gs->colorGrid[16*i + 4*j +3] &&
-                !(gs->colorGrid[16*i + 4*j] == white))
+                !(gs->colorGrid[16*i + 4*j] == black))
                 {
                     resPlayer = gs->colorGrid[16*i + 4*j] == gs->player1.dotColor ? 1 : 2;
                 }
@@ -262,7 +262,7 @@ namespace game
                 if (gs->colorGrid[16*i + j] == gs->colorGrid[16*i + 4 + j] &&
                     gs->colorGrid[16*i + j] == gs->colorGrid[16*i + 8 + j] &&
                     gs->colorGrid[16*i + j] == gs->colorGrid[16*i + 12 + j] &&
-                    !(gs->colorGrid[16*i + j] == white))
+                    !(gs->colorGrid[16*i + j] == black))
                 {
                     resPlayer = gs->colorGrid[16*i + j] == gs->player1.dotColor ? 1 : 2;
                 }
@@ -271,7 +271,7 @@ namespace game
             if (gs->colorGrid[16*i] == gs->colorGrid[16*i + 4 + 1] &&
                 gs->colorGrid[16*i] == gs->colorGrid[16*i + 8 + 2] &&
                 gs->colorGrid[16*i] == gs->colorGrid[16*i + 12 + 3] &&
-                !(gs->colorGrid[16*i] == white))
+                !(gs->colorGrid[16*i] == black))
             {
                 resPlayer = gs->colorGrid[16*i] == gs->player1.dotColor ? 1 : 2;
             }
@@ -280,7 +280,7 @@ namespace game
             if (gs->colorGrid[16*i + 4 - 1] == gs->colorGrid[16*i + 8 - 2] &&
                 gs->colorGrid[16*i + 4 - 1] == gs->colorGrid[16*i + 12 - 3] &&
                 gs->colorGrid[16*i + 4 - 1] == gs->colorGrid[16*i + 16 - 4] &&
-                !(gs->colorGrid[16*i + 4 - 1] == white))
+                !(gs->colorGrid[16*i + 4 - 1] == black))
             {
                 resPlayer = gs->colorGrid[16*i + 4 - 1] == gs->player1.dotColor ? 1 : 2;
             }

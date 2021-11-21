@@ -14,6 +14,8 @@ enum Episode
     S02E01,
     S02E02,
     S02E03,
+
+    FUN_01,
 };
 
 namespace episodes

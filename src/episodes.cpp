@@ -353,6 +353,14 @@ void do_s02e02(Cube *cube, RemoteSystem *remote)
     }
 }
 
+void do_fun_01(Cube *cube, RemoteSystem *remote)
+{
+}
+
+void do_s02e03(Cube *cube, RemoteSystem *remote)
+{
+}
+
 namespace episodes
 {
     void (*list_of_episodes[])(Cube *, RemoteSystem *remote) =
@@ -364,6 +372,8 @@ namespace episodes
             do_s01e04,
             do_s02e01,
             do_s02e02,
+            do_s02e03,
+            do_fun_01,
         };
 
     void start_episode(Cube *cube, RemoteSystem *remote, Episode episode)

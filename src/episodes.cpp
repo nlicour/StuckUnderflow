@@ -205,16 +205,6 @@ void do_s01e04(Cube *cube, RemoteSystem *remote)
 
 void do_multi_remotes(Cube* cube, RemoteSystem* remote)
 {
-    if (!remote::connect(remote, 0))
-    {
-        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
-    }
-
-    if (!remote::connect(remote, 1))
-    {
-        fprintf(stderr, "Couldn't connect to remote %d\n", 1);
-    }
-
     auto fill_cube = [&](Color fill_color){
         for (uint8_t x = 0; x < 4; ++x)
         {
@@ -267,14 +257,9 @@ void do_s02e01(Cube *cube, RemoteSystem *remote)
     cube::lightTal(cube, position, {255, 0, 255});
     cube::commit(cube);
 
-    if (!remote::connect(remote, 1))
-    {
-        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
-    }
-
     while (true)
     {
-        button = remote::get_remote_state(remote, 1);
+        button = remote::get_remote_state(remote, 0);
         if (button != 0)
         {
             if (button & 0x1)
@@ -304,16 +289,6 @@ void do_s02e02(Cube *cube, RemoteSystem *remote)
     Vec3 positions[2];
     positions[0] = {0, 0, 0};
     positions[1] = {0, 0, 3};
-
-    if (!remote::connect(remote, 0))
-    {
-        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
-    }
-
-    if (!remote::connect(remote, 1))
-    {
-        fprintf(stderr, "Couldn't connect to remote %d\n", 0);
-    }
 
     cube::lightTal(cube, positions[0], {255, 0, 0});
     cube::lightTal(cube, positions[1], {0, 255, 0});

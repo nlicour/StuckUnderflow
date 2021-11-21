@@ -94,7 +94,8 @@ bool connect(RemoteSystem* rs, uint32_t remote_id)
 
     if (connect(socket_handle, (struct sockaddr*)&server, sizeof(server)) < 0)
     {
-        fprintf(stderr, "Coudn't connect to remove with IP %s\n", remotes_ips[remote_id]);
+        fprintf(stderr, "Coudn't connect to remote %d with IP %s\n",
+            remote_id, remotes_ips[remote_id]);
         return false;
     }
 

@@ -106,9 +106,45 @@ void do_start_animation(GameState* gs, Cube* cube)
     printf("Done\n");
 }
 
-void do_end_animation(Cube* cube)
+void do_end_animation(Cube* cube, Color winner)
 {
-    // @Todo(cocotropico)
+    clear_cube(cube);
+    Color black = {0, 0, 0};
+
+    for (unsigned int i = 0; i < 20; i ++)
+    {
+        for (uint8_t x = 0; x < 4; ++x)
+        {
+            for (uint8_t y = 0; y < 4; ++y)
+            {
+                for (uint8_t z = 0; z < 4; ++z)
+                {
+                    if (x == 0 || x == 3 || y == 0 || y == 3 || z == 0 || z == 3)
+                    {
+                        cube::lightTal(cube, {x, y, z}, i%2 == 0 ? black : winner);
+                    }
+                    else
+                    {
+                        cube::lightTal(cube, {x, y, z}, i%2 == 0 ? winner : black);
+                    }
+                }
+            }
+        }
+        cube::commit(cube);
+        usleep(250000);
+    }
+
+    for (uint8_t x = 0; x < 4; ++x)
+    {
+        for (uint8_t y = 0; y < 4; ++y)
+        {
+            for (uint8_t z = 0; z < 4; ++z)
+            {
+                cube::lightTal(cube, {x, y, z}, winner);
+            }
+        }
+    }
+    cube::commit(cube);
 }
 } // anonymous namespace
 
@@ -211,7 +247,7 @@ namespace game
         }
         else if (gs->run_end_animation)
         {
-            do_end_animation(cube);
+            do_end_animation(cube, {255, 0, 0});
         }
         else
         {

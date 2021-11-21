@@ -131,6 +131,12 @@ namespace game
         game->player1.id = idJoueur1;
         game->player2.id = idJoueur2;
 
+        game->player1.dotColor = {255, 0, 0};
+        game->player1.cursorColor = {255, 128, 0};
+
+        game->player2.dotColor = {128, 255, 0};
+        game->player2.cursorColor = {0, 255, 0};
+
         return game;
     }
 
@@ -164,7 +170,8 @@ namespace game
     void play_turn(GameState &gs, RemoteSystem *rs, Cube *cube)
     {
         Vec3 move = {0, 0, 0};
-        for (uint8_t i = 0; i < 3; i++)
+        bool hasValidatedMove = false;
+        while (!hasValidatedMove)
         {
             uint16_t button = remote::wait_for_state_change(rs, gs.currentPlayer->id);
 
@@ -180,7 +187,7 @@ namespace game
                 if (button & 0x8)
                 {
                     pasteDot(&gs, cube);
-                    break;
+                    hasValidatedMove = true;
                 }
             }
         }

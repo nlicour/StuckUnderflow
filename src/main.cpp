@@ -39,7 +39,7 @@ int main(int argc, char *argv[])
     game::reset(game);
 
     game->currentPlayer = &game->player1;
-
+    game::draw(game, cube);
     for (;;)
     {
         if (game::is_game_running(game))

@@ -24,7 +24,7 @@ struct Tal
 
 struct Vec3
 {
-    uint32_t x, y, z;
+    int x, y, z;
 
     bool operator==(const Vec3& other)
     {

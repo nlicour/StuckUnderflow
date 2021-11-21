@@ -302,9 +302,9 @@ namespace game
 
             if (button)
             {
-                move.x = button & 0x1 ? 1 : 0;
-                move.y = button & 0x2 ? 1 : 0;
-                move.z = button & 0x4 ? 1 : 0;
+                move.x = button & 0x1 ? 1 : (button & 0x8 ? -1 : 0);
+                move.y = button & 0x2 ? 1 : (button & 0x16 ? -1 : 0);
+                move.z = button & 0x4 ? 1 : (button & 0x32 ? -1 : 0);
 
                 movePlayer(&gs, move, cube);
                 // valide le jeton
